@@ -1,5 +1,4 @@
 use macroquad::prelude::*;
-use crate::game::Game;
 
 pub struct Player{
     HP : i32,

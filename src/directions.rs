@@ -17,4 +17,12 @@ impl Directions {
             Directions::West => Vec2::new(-1f32, 0f32),
         }
     }
+    pub fn opposite( &self) -> Self {
+        match self {
+            Directions::North => Directions::South,
+            Directions::East => Directions::West,
+            Directions::South => Directions::North,
+            Directions::West => Directions::East,
+        }
+    }
 }
