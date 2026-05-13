@@ -2,6 +2,7 @@ use crate::cellMap::CellMap;
 use crate::directions::Directions;
 use crate::settings;
 use getset::{Getters, MutGetters};
+use macroquad::color::{BLUE, GREEN, RED};
 use macroquad::prelude::draw_line;
 use macroquad::rand;
 
@@ -17,7 +18,7 @@ pub struct Cell {
 impl Cell {
     pub fn new() -> Self {
         Self {
-        //    directions: Self::gen_directions(),
+            //    directions: Self::gen_directions(),
             walls_bit: 0b1111, //NESW
                                //is_visited: false,
         }
@@ -70,6 +71,7 @@ impl Cell {
 impl Cell {
     pub fn update(&mut self) {}
     pub fn draw(&self, x_pos: &f32, y_pos: &f32, tile_size: &f32, wall_size: &f32) {
+        /*
         if self.walls_bit() & 0b1000 != 0 {
             draw_line(
                 *x_pos,
@@ -80,39 +82,43 @@ impl Cell {
                 settings::cell::COLOR,
             )
         }
-
+        */
         if self.walls_bit() & 0b0100 != 0 {
             draw_line(
                 *x_pos + tile_size,
                 *y_pos,
                 x_pos + tile_size,
-                y_pos - tile_size,
+                y_pos + tile_size,
                 *wall_size,
-                settings::cell::COLOR,
+                settings::menu::cell::COLOR,
             )
         }
+
 
         if self.walls_bit() & 0b0010 != 0 {
             draw_line(
                 *x_pos,
-                y_pos - tile_size,
+                y_pos + tile_size,
                 x_pos + tile_size,
-                y_pos - tile_size,
+                y_pos + tile_size,
                 *wall_size,
-                settings::cell::COLOR,
+                settings::menu::cell::COLOR,
             )
         }
-
+        /*
         if self.walls_bit() & 0b0001 != 0 {
             draw_line(
                 *x_pos,
                 *y_pos,
                 *x_pos,
-                y_pos - tile_size,
+                y_pos + tile_size,
                 *wall_size,
                 settings::cell::COLOR,
+
             )
         }
+        
+         */
     }
 }
 
@@ -125,5 +131,4 @@ mod tests {
         let cell = Cell::new();
         assert_eq!(cell.walls_bit, 0b1111);
     }
-
 }

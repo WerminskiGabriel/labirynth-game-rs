@@ -15,18 +15,14 @@ use macroquad::prelude::*;
 
 #[macroquad::main("labirynth")]
 async fn main() {
-    let board_size = settings::map::SIZE;
-    let board_width = settings::map::WIDTH;
-    let tile_size = board_width / board_size as f32;
-
-    let mut game = Game::new(board_size);
-    //rand::srand(miniquad::date::now() as u64);
+    let mut game = Game::new(settings::menu::map::SIZE);
+    rand::srand(miniquad::date::now() as u64);
     game.map_mut().gen_labyrinth();
 
     loop {
+        clear_background(settings::ui::BACKGROUND_COLOR);
         game.update();
-        game.draw(tile_size,tile_size * 0.07 , Vec2::new(50f32, 50f32));
-
+        game.draw();
         next_frame().await
     }
 }
