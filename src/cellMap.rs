@@ -10,23 +10,24 @@ pub struct CellMap {
     #[getset(get = "pub", get_mut = "pub")]
     height: usize,
     grid: Vec<Cell>,
-    #[getset(get = "pub", get_mut = "pub")]
-    full: bool,
 }
 
 impl CellMap {
-    pub fn new(size: usize) -> Self {
-        let width = size;
-        let height = size;
+    pub fn new(cols: usize, rows: usize) -> Self {
+        let width = cols;
+        let height = rows;
         Self {
             width,
             height,
             grid: vec![Cell::new(); width * height],
-            full: false,
         }
     }
     pub fn gen_labyrinth(&mut self) {
         gen_labyrinth(self);
+    }
+    pub fn change_labyrinth(&mut self) {
+        self.grid = vec![Cell::new(); self.width * self.height];
+        self.gen_labyrinth();
     }
 
     pub fn grid(&self, vec: Vec2) -> &Cell {
@@ -40,7 +41,6 @@ impl CellMap {
 impl CellMap {
     pub fn update(&mut self) {}
     pub fn draw(&self, tile_size: f32, wall_size: f32, start_pos_tl: Vec2) {
-
         draw_line(
             start_pos_tl.x,
             start_pos_tl.y,

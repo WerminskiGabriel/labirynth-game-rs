@@ -11,6 +11,20 @@ const COLOR_BLACK: Color = Color {
     b: 63f32 / 255.0,
     a: 1f32,
 };
+const COLOR_RED2: Color = Color {
+    r: 200f32 / 255.0,
+    g: 0f32 / 255.0,
+    b: 47f32 / 255.0,
+    a: 1f32,
+};
+const COLOR_BLACK2: Color = Color {
+    r: 47f32 / 255.0,
+    g: 1f32 / 255.0,
+    b: 1f32 / 255.0,
+    a: 1f32,
+};
+
+
 const COLOR_BEIGE: Color = Color {
     r: 230f32 / 255.0,
     g: 223f32 / 255.0,
@@ -22,31 +36,43 @@ pub mod player {
     pub const SPEED: f32 = 10f32;
     pub const SIZE: f32 = 20f32;
 }
-
+pub mod window {
+    use super::*;
+    pub const TITLE: &str = "Maze";
+    pub const WIDTH: i32 = 1440;
+    pub const HEIGHT: i32 = 900;
+}
 pub mod menu {
     use super::*;
-
     pub mod map {
         use super::*;
-
-        pub const SIZE: usize = 20usize;
-        pub const WIDTH: f32 = 600f32;
+        pub const COLS: usize = 60usize;
+        pub const ROWS: usize = 100usize;
+        pub const WIDTH: f32 = 1340f32;
         pub const START_POS: Vec2 = Vec2::new(50f32, 50f32);
     }
 
     pub mod cell {
-        use std::cmp::max;
         use super::*;
-
+        use crate::settings;
         pub const COLOR: Color = COLOR_RED;
-        pub const THICKNESS : f32 =  (SIZE * 0.3); //> 2f32 {SIZE * 0.07} else {2f32};
-        pub const SIZE: f32 = map::WIDTH / map::SIZE as f32;
+        pub const THICKNESS: f32 = (SIZE * 0.6); //> 2f32 {SIZE * 0.07} else {2f32};
+        pub const SIZE: f32 = map::WIDTH / settings::menu::map::ROWS as f32;
     }
 
-}
+    pub mod button {
+        use super::*;
 
-pub mod cell {
+        pub const W: f32 = 600f32;
+        pub const H: f32 = 150f32;
+        pub const FONT_SIZE : f32 = 65f32;
+        pub const FONT_COLOR : Color = COLOR_RED;
+        pub const FONT_COLOR_HOVER : Color = COLOR_BLACK;
 
+        pub const COLOR: Color = COLOR_BLACK;
+        pub const COLOR_HOVER: Color = COLOR_RED;
+        pub const COLOR_LINES : Color = COLOR_BLACK2;
+    }
 }
 
 pub mod ui {
@@ -59,6 +85,6 @@ pub mod ui {
 pub mod button {
     use super::*;
 
-    pub const COLOR : Color = COLOR_RED;
-
+    pub const COLOR: Color = COLOR_BLACK;
+    pub const COLOR_HOVER: Color = COLOR_RED;
 }
