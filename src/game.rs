@@ -1,5 +1,6 @@
 use crate::cell::Cell;
 use crate::cellMap::CellMap;
+use crate::player::Player;
 use crate::{button, settings};
 use getset::{Getters, MutGetters};
 use macroquad::prelude::*;
@@ -18,6 +19,7 @@ pub struct Game {
     state: GameState,
     #[getset(get = "pub", get_mut = "pub")]
     map: CellMap,
+    player: Player,
 }
 
 impl Game {
@@ -25,16 +27,27 @@ impl Game {
         Self {
             state: GameState::Menu,
             map: CellMap::new(cols, rows),
+            player: Player::new(),
         }
     }
 }
 
 impl Game {
-    pub fn update(&mut self, font: &Font, trigger : &mut f64) {
+    pub fn update(&mut self, font: &Font, trigger: &mut f64) {
         match self.state {
-            GameState::Playing => {}
+            GameState::Playing => {
+                self.map.draw_playing(
+                    &self.player,
+                    settings::playing::cell::SIZE,
+                    settings::playing::cell::THICKNESS,
+                    settings::window::WIDTH as f32,
+                    settings::window::HEIGHT as f32,
+                );
+                self.player.draw();
+                self.player.update(&self.map);
+            }
             GameState::Menu => {
-                self.map().draw(
+                self.map().draw_menu(
                     settings::menu::cell::SIZE,
                     settings::menu::cell::THICKNESS,
                     settings::menu::map::START_POS,
@@ -51,10 +64,10 @@ impl Game {
                     font.to_owned(),
                 ) {
                     self.state = GameState::Playing;
-                } else if *trigger <= get_time(){
+                }
+                if *trigger <= get_time() {
                     self.map.change_labyrinth();
-                    *trigger = get_time() + 2f64;
-                
+                    *trigger = get_time() + 0.5f64;
                 }
 
                 /*if is_mouse_button_pressed(MouseButton::Left) {

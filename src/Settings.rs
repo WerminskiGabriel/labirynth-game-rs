@@ -24,7 +24,6 @@ const COLOR_BLACK2: Color = Color {
     a: 1f32,
 };
 
-
 const COLOR_BEIGE: Color = Color {
     r: 230f32 / 255.0,
     g: 223f32 / 255.0,
@@ -33,14 +32,27 @@ const COLOR_BEIGE: Color = Color {
 };
 
 pub mod player {
-    pub const SPEED: f32 = 10f32;
-    pub const SIZE: f32 = 20f32;
+    use super::*;
+
+    pub const SPEED: f32 = 30f32;
+    pub const SIZE: f32 = 30f32;
+    pub const COLOR: Color = COLOR_BEIGE;
 }
 pub mod window {
     use super::*;
     pub const TITLE: &str = "Maze";
     pub const WIDTH: i32 = 1440;
     pub const HEIGHT: i32 = 900;
+}
+
+pub mod playing {
+    use super::*;
+    pub mod cell {
+        use super::*;
+        pub const SIZE: f32 = 200f32;
+        pub const THICKNESS: f32 = 10f32;
+        pub const COLOR: Color = COLOR_RED;
+    }
 }
 pub mod menu {
     use super::*;
@@ -65,13 +77,13 @@ pub mod menu {
 
         pub const W: f32 = 600f32;
         pub const H: f32 = 150f32;
-        pub const FONT_SIZE : f32 = 65f32;
-        pub const FONT_COLOR : Color = COLOR_RED;
-        pub const FONT_COLOR_HOVER : Color = COLOR_BLACK;
+        pub const FONT_SIZE: f32 = 65f32;
+        pub const FONT_COLOR: Color = COLOR_RED;
+        pub const FONT_COLOR_HOVER: Color = COLOR_BLACK;
 
         pub const COLOR: Color = COLOR_BLACK;
         pub const COLOR_HOVER: Color = COLOR_RED;
-        pub const COLOR_LINES : Color = COLOR_BLACK2;
+        pub const COLOR_LINES: Color = COLOR_BLACK2;
     }
 }
 
