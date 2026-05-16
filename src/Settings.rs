@@ -34,7 +34,8 @@ const COLOR_BEIGE: Color = Color {
 pub mod player {
     use super::*;
 
-    pub const SPEED: f32 = 30f32;
+    pub const SPEED: f32 = 12f32;
+    pub const SPEED_FAST: f32 = 22f32;
     pub const SIZE: f32 = 30f32;
     pub const COLOR: Color = COLOR_BEIGE;
 }
@@ -50,7 +51,7 @@ pub mod playing {
     pub mod cell {
         use super::*;
         pub const SIZE: f32 = 200f32;
-        pub const THICKNESS: f32 = 10f32;
+        pub const THICKNESS: f32 = 15f32;
         pub const COLOR: Color = COLOR_RED;
     }
 }
@@ -68,7 +69,7 @@ pub mod menu {
         use super::*;
         use crate::settings;
         pub const COLOR: Color = COLOR_RED;
-        pub const THICKNESS: f32 = (SIZE * 0.6); //> 2f32 {SIZE * 0.07} else {2f32};
+        pub const THICKNESS: f32 = (SIZE * 0.6);
         pub const SIZE: f32 = map::WIDTH / settings::menu::map::ROWS as f32;
     }
 

@@ -25,7 +25,7 @@ pub struct Game {
 impl Game {
     pub fn new(cols: usize, rows: usize) -> Self {
         Self {
-            state: GameState::Menu,
+            state: GameState::Playing,
             map: CellMap::new(cols, rows),
             player: Player::new(),
         }

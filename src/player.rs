@@ -14,6 +14,7 @@ pub struct Player {
     HP: i32,
     #[getset(get = "pub", get_mut = "pub")]
     position: Vec2,
+    speed : f32,
 }
 
 impl Player {
@@ -22,18 +23,30 @@ impl Player {
         Self {
             HP: 100,
             position: Vec2::new(spawn, spawn),
+            speed : settings::player::SPEED,
         }
     }
 }
 
 impl Player {
     pub fn update(&mut self, map: &CellMap) {
+        let speed_fast = settings::player::SPEED_FAST;
+        let speed_slow = settings::player::SPEED;
+
+        let mut speed = speed_slow;
+        if is_key_down(KeyCode::LeftShift){
+            speed = speed_fast;
+        }else if is_key_released(KeyCode::LeftShift){
+            speed = speed_slow;
+        }
+
         let cell_size = settings::playing::cell::SIZE;
         let wall_size = settings::playing::cell::THICKNESS;
         let window_width = settings::window::WIDTH as f32;
         let window_height = settings::window::HEIGHT as f32;
+        let player_radius = settings::player::SIZE / 2f32;
 
-        let speed = settings::player::SPEED;
+
 
         let mut tmp_x: f32 = self.position.x;
 
@@ -46,7 +59,7 @@ impl Player {
                 &wall_size,
                 map,
                 Directions::West,
-                true,
+                player_radius,
             );
         } else if is_key_down(KeyCode::D) {
             tmp_x += speed;
@@ -57,7 +70,7 @@ impl Player {
                 &wall_size,
                 map,
                 Directions::East,
-                true,
+                player_radius,
             );
         }
         self.position.x = tmp_x;
@@ -71,7 +84,7 @@ impl Player {
                 &wall_size,
                 map,
                 Directions::North,
-                false,
+                player_radius,
             );
         } else if is_key_down(KeyCode::S) {
             tmp_y += speed;
@@ -81,7 +94,7 @@ impl Player {
                 &wall_size,
                 map,
                 Directions::South,
-                false,
+                player_radius,
             );
         }
 
@@ -95,7 +108,7 @@ impl Player {
         wall_size: &f32,
         map: &CellMap,
         direction: Directions,
-        is_x: bool,
+        player_radius: f32,
     ) {
         let start_x_idx: f32 = (self.position.x / cell_size).floor();
         let start_y_idx = (self.position.y / cell_size).floor();
@@ -105,23 +118,31 @@ impl Player {
 
         match direction {
             Directions::North => {
-                if cell.is_north_wall() && (*tmp / cell_size).floor() != start_y_idx {
-                    *tmp = start_y_idx * cell_size + wall_size
+                if cell.is_north_wall()
+                    && ((*tmp - player_radius - wall_size) / cell_size).floor() != start_y_idx
+                {
+                    *tmp = start_y_idx * cell_size + wall_size + player_radius;
                 }
             }
             Directions::East => {
-                if cell.is_east_wall() && (*tmp / cell_size).floor() != start_x_idx {
-                    *tmp =(start_x_idx + 1f32) * cell_size - wall_size
+                if cell.is_east_wall()
+                    && ((*tmp + player_radius + wall_size) / cell_size).floor() != start_x_idx
+                {
+                    *tmp = (start_x_idx + 1f32) * cell_size - wall_size - player_radius
                 }
             }
             Directions::South => {
-                if cell.is_south_wall() && (*tmp / cell_size).floor() != start_y_idx {
-                    *tmp = (start_y_idx + 1f32) * cell_size - wall_size
+                if cell.is_south_wall()
+                    && ((*tmp + player_radius+ wall_size) / cell_size).floor() != start_y_idx
+                {
+                    *tmp = (start_y_idx + 1f32) * cell_size - wall_size - player_radius
                 }
             }
             Directions::West => {
-                if cell.is_west_wall() && (*tmp / cell_size).floor() != start_x_idx {
-                    *tmp = start_x_idx * cell_size + wall_size
+                if cell.is_west_wall()
+                    && ((*tmp - player_radius - wall_size) / cell_size).floor() != start_x_idx
+                {
+                    *tmp = start_x_idx * cell_size + wall_size + player_radius
                 }
             }
         };
