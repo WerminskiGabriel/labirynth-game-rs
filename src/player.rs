@@ -14,7 +14,7 @@ pub struct Player {
     HP: i32,
     #[getset(get = "pub", get_mut = "pub")]
     position: Vec2,
-    speed : f32,
+    speed: f32,
 }
 
 impl Player {
@@ -23,7 +23,7 @@ impl Player {
         Self {
             HP: 100,
             position: Vec2::new(spawn, spawn),
-            speed : settings::player::SPEED,
+            speed: settings::player::SPEED,
         }
     }
 }
@@ -34,9 +34,9 @@ impl Player {
         let speed_slow = settings::player::SPEED;
 
         let mut speed = speed_slow;
-        if is_key_down(KeyCode::LeftShift){
+        if is_key_down(KeyCode::LeftShift) {
             speed = speed_fast;
-        }else if is_key_released(KeyCode::LeftShift){
+        } else if is_key_released(KeyCode::LeftShift) {
             speed = speed_slow;
         }
 
@@ -45,8 +45,6 @@ impl Player {
         let window_width = settings::window::WIDTH as f32;
         let window_height = settings::window::HEIGHT as f32;
         let player_radius = settings::player::SIZE / 2f32;
-
-
 
         let mut tmp_x: f32 = self.position.x;
 
@@ -133,7 +131,7 @@ impl Player {
             }
             Directions::South => {
                 if cell.is_south_wall()
-                    && ((*tmp + player_radius+ wall_size) / cell_size).floor() != start_y_idx
+                    && ((*tmp + player_radius + wall_size) / cell_size).floor() != start_y_idx
                 {
                     *tmp = (start_y_idx + 1f32) * cell_size - wall_size - player_radius
                 }
@@ -148,13 +146,33 @@ impl Player {
         };
     }
 
-    pub fn draw(&self) {
+    pub fn draw(&self, mouse_pos: Vec2) {
+        let center_pos = Vec2::new(
+            settings::window::WIDTH as f32 / 2f32,
+            settings::window::HEIGHT as f32 / 2f32,
+        );
+        let rotation_vec = mouse_pos - center_pos;
+        let rotation = rotation_vec.y.atan2(rotation_vec.x);
+        // weapon
+        draw_rectangle_ex(
+            center_pos.x,
+            center_pos.y,
+            settings::player::SIZE * 2f32,
+            settings::player::SIZE / 2f32,
+            DrawRectangleParams {
+                offset: Vec2::new(0f32, 0f32),
+                rotation,
+                color: settings::player::COLOR,
+            },
+        );
+
         draw_circle(
             settings::window::WIDTH as f32 / 2f32,
             settings::window::HEIGHT as f32 / 2f32,
             settings::player::SIZE,
             settings::player::COLOR,
         );
+
         draw_text(
             format!("{}", self.position).as_str(),
             20f32,

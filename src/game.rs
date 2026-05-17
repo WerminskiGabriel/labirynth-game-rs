@@ -36,6 +36,8 @@ impl Game {
     pub fn update(&mut self, font: &Font, trigger: &mut f64) {
         match self.state {
             GameState::Playing => {
+                let mouse_pos = mouse_position();
+
                 self.map.draw_playing(
                     &self.player,
                     settings::playing::cell::SIZE,
@@ -43,7 +45,7 @@ impl Game {
                     settings::window::WIDTH as f32,
                     settings::window::HEIGHT as f32,
                 );
-                self.player.draw();
+                self.player.draw(Vec2::new(mouse_pos.0, mouse_pos.1));
                 self.player.update(&self.map);
             }
             GameState::Menu => {

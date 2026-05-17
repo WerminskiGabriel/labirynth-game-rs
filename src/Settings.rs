@@ -37,6 +37,9 @@ pub mod player {
     pub const SPEED: f32 = 12f32;
     pub const SPEED_FAST: f32 = 22f32;
     pub const SIZE: f32 = 30f32;
+    
+    pub const WIDTH : f32 = SIZE * 2f32;
+    pub const HEIGHT: f32 = SIZE; 
     pub const COLOR: Color = COLOR_BEIGE;
 }
 pub mod window {
