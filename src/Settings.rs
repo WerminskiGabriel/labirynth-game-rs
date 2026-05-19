@@ -37,10 +37,11 @@ pub mod player {
     pub const SPEED: f32 = 12f32;
     pub const SPEED_FAST: f32 = 22f32;
     pub const SIZE: f32 = 30f32;
-    
-    pub const WIDTH : f32 = SIZE * 2f32;
-    pub const HEIGHT: f32 = SIZE; 
+
+    pub const WIDTH: f32 = SIZE / 2f32;
+    pub const HEIGHT: f32 = SIZE * 2f32;
     pub const COLOR: Color = COLOR_BEIGE;
+    
 }
 pub mod window {
     use super::*;
@@ -49,15 +50,30 @@ pub mod window {
     pub const HEIGHT: i32 = 900;
 }
 
-pub mod playing {
+
+pub mod bullet {
     use super::*;
-    pub mod cell {
+
+    pub const LIFETIME : f32 = 10f32;
+    pub const SIZE : f32 = player::SIZE * 0.5f32;
+    pub const COLOR : Color = COLOR_BEIGE;
+    pub const SPEED : f32 = 3f32 * SIZE;
+
+}
+pub mod cell {
+    use super::*;
+    pub mod playing {
+
         use super::*;
-        pub const SIZE: f32 = 200f32;
-        pub const THICKNESS: f32 = 15f32;
+        use super::*;
+        use crate::settings::COLOR_RED;
+        use macroquad::color::Color;
+        pub const SIZE: f32 = 300f32;
+        pub const THICKNESS: f32 = 30f32;
         pub const COLOR: Color = COLOR_RED;
     }
 }
+
 pub mod menu {
     use super::*;
     pub mod map {

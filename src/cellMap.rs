@@ -44,11 +44,14 @@ impl CellMap {
     pub fn draw_playing(
         &self,
         player: &Player,
-        tile_size: f32,
-        wall_size: f32,
-        width_window: f32,
-        height_window: f32,
     ) {
+        // --[CONSTS]--
+        let tile_size: f32 = settings::cell::playing::SIZE;
+        let wall_size: f32 = settings::cell::playing::THICKNESS;
+        let width_window: f32 = settings::window::WIDTH as f32;
+        let height_window: f32 = settings::window::HEIGHT as f32;
+        // -----------
+
         let player_pos = player.position();
 
         let camera_x_tl = player_pos.x - (width_window / 2f32);

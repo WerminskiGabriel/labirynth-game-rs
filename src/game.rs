@@ -1,9 +1,11 @@
 use crate::cell::Cell;
 use crate::cellMap::CellMap;
 use crate::player::Player;
+use crate::weapons::Gun;
 use crate::{button, settings};
 use getset::{Getters, MutGetters};
 use macroquad::prelude::*;
+use crate::weapons::Drawable;
 
 enum GameState {
     Menu,
@@ -20,6 +22,7 @@ pub struct Game {
     #[getset(get = "pub", get_mut = "pub")]
     map: CellMap,
     player: Player,
+    gun: Gun,
 }
 
 impl Game {
@@ -28,6 +31,7 @@ impl Game {
             state: GameState::Playing,
             map: CellMap::new(cols, rows),
             player: Player::new(),
+            gun: Gun::new(),
         }
     }
 }
@@ -38,16 +42,15 @@ impl Game {
             GameState::Playing => {
                 let mouse_pos = mouse_position();
 
-                self.map.draw_playing(
-                    &self.player,
-                    settings::playing::cell::SIZE,
-                    settings::playing::cell::THICKNESS,
-                    settings::window::WIDTH as f32,
-                    settings::window::HEIGHT as f32,
-                );
-                self.player.draw(Vec2::new(mouse_pos.0, mouse_pos.1));
+                self.map.draw_playing(&self.player);
+
+                self.gun.update(Vec2::new(mouse_pos.0,mouse_pos.1), self.player.position() , &self.map );
+                self.gun.draw(Vec2::new(mouse_pos.0,mouse_pos.1), self.player.position());
+                self.player.draw();
+
                 self.player.update(&self.map);
             }
+
             GameState::Menu => {
                 self.map().draw_menu(
                     settings::menu::cell::SIZE,

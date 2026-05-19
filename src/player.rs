@@ -1,5 +1,6 @@
 use crate::cell::Cell;
 use crate::cellMap::CellMap;
+use crate::collisions::walls_collision;
 use crate::directions::Directions;
 use crate::settings;
 use getset::{Getters, MutGetters};
@@ -19,7 +20,7 @@ pub struct Player {
 
 impl Player {
     pub fn new() -> Self {
-        let spawn = settings::playing::cell::SIZE / 2f32;
+        let spawn = settings::cell::playing::SIZE / 2f32;
         Self {
             HP: 100,
             position: Vec2::new(spawn, spawn),
@@ -40,8 +41,8 @@ impl Player {
             speed = speed_slow;
         }
 
-        let cell_size = settings::playing::cell::SIZE;
-        let wall_size = settings::playing::cell::THICKNESS;
+        let cell_size = settings::cell::playing::SIZE;
+        let wall_size = settings::cell::playing::THICKNESS;
         let window_width = settings::window::WIDTH as f32;
         let window_height = settings::window::HEIGHT as f32;
         let player_radius = settings::player::SIZE / 2f32;
@@ -51,6 +52,16 @@ impl Player {
         if is_key_down(KeyCode::A) {
             tmp_x -= speed;
 
+            walls_collision(
+                &self.position,
+                player_radius,
+                &mut tmp_x,
+                map,
+                Directions::West,
+                0f32
+            );
+
+            /*
             self.check_walls_collisions(
                 &mut tmp_x,
                 &cell_size,
@@ -58,34 +69,60 @@ impl Player {
                 map,
                 Directions::West,
                 player_radius,
-            );
+            );*/
         } else if is_key_down(KeyCode::D) {
             tmp_x += speed;
 
-            self.check_walls_collisions(
+            walls_collision(
+                &self.position,
+                player_radius,
+                &mut tmp_x,
+                map,
+                Directions::East,
+                0f32,
+            );
+            /* self.check_walls_collisions(
                 &mut tmp_x,
                 &cell_size,
                 &wall_size,
                 map,
                 Directions::East,
                 player_radius,
-            );
+            );*/
         }
         self.position.x = tmp_x;
 
         let mut tmp_y: f32 = self.position.y;
         if is_key_down(KeyCode::W) {
             tmp_y -= speed;
-            self.check_walls_collisions(
+            walls_collision(
+                &self.position,
+                player_radius,
                 &mut tmp_y,
-                &cell_size,
-                &wall_size,
                 map,
                 Directions::North,
-                player_radius,
+                0f32,
             );
+        /*
+        self.check_walls_collisions(
+            &mut tmp_y,
+            &cell_size,
+            &wall_size,
+            map,
+            Directions::North,
+            player_radius,
+        );*/
         } else if is_key_down(KeyCode::S) {
             tmp_y += speed;
+            walls_collision(
+                &self.position,
+                player_radius,
+                &mut tmp_y,
+                map,
+                Directions::South,
+                0f32,
+            );
+            /*
             self.check_walls_collisions(
                 &mut tmp_y,
                 &cell_size,
@@ -93,7 +130,7 @@ impl Player {
                 map,
                 Directions::South,
                 player_radius,
-            );
+            );*/
         }
 
         self.position.y = tmp_y
@@ -146,26 +183,7 @@ impl Player {
         };
     }
 
-    pub fn draw(&self, mouse_pos: Vec2) {
-        let center_pos = Vec2::new(
-            settings::window::WIDTH as f32 / 2f32,
-            settings::window::HEIGHT as f32 / 2f32,
-        );
-        let rotation_vec = mouse_pos - center_pos;
-        let rotation = rotation_vec.y.atan2(rotation_vec.x);
-        // weapon
-        draw_rectangle_ex(
-            center_pos.x,
-            center_pos.y,
-            settings::player::SIZE * 2f32,
-            settings::player::SIZE / 2f32,
-            DrawRectangleParams {
-                offset: Vec2::new(0f32, 0f32),
-                rotation,
-                color: settings::player::COLOR,
-            },
-        );
-
+    pub fn draw(&self) {
         draw_circle(
             settings::window::WIDTH as f32 / 2f32,
             settings::window::HEIGHT as f32 / 2f32,

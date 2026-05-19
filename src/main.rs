@@ -7,6 +7,9 @@ mod cellMap;
 mod directions;
 mod labyrinth;
 mod settings;
+mod weapons;
+mod Bullet;
+mod collisions;
 
 use crate::cellMap::CellMap;
 use game::*;

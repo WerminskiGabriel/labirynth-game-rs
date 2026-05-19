@@ -80,7 +80,6 @@ impl Cell {
     pub fn is_west_wall(&self) -> bool {
         self.walls_bit() & 0b0001 != 0
     }
-
 }
 
 impl Cell {
@@ -132,18 +131,6 @@ impl Cell {
         }
     }
     pub fn draw_reduced(&self, x_pos: &f32, y_pos: &f32, tile_size: &f32, wall_size: &f32) {
-        /*
-        if self.walls_bit() & 0b1000 != 0 {
-            draw_line(
-                *x_pos,
-                *y_pos,
-                x_pos + tile_size,
-                *y_pos,
-                *wall_size,
-                settings::cell::COLOR,
-            )
-        }
-        */
         if self.walls_bit() & 0b0100 != 0 {
             draw_line(
                 *x_pos + tile_size,
@@ -165,20 +152,6 @@ impl Cell {
                 settings::menu::cell::COLOR,
             )
         }
-        /*
-        if self.walls_bit() & 0b0001 != 0 {
-            draw_line(
-                *x_pos,
-                *y_pos,
-                *x_pos,
-                y_pos + tile_size,
-                *wall_size,
-                settings::cell::COLOR,
-
-            )
-        }
-
-         */
     }
 }
 
