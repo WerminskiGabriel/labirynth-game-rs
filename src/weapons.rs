@@ -47,7 +47,7 @@ impl Gun {
             },
 
             dmg: 10f32,
-            bullet_speed: settings::player::SPEED + 10f32,
+            bullet_speed: settings::player::SPEED,
             bullets: Vec::new(),
         }
     }
@@ -64,16 +64,8 @@ impl Gun {
         }
 
         self.bullets.retain_mut( |bullet | !bullet.movement((map)));
-        /*
-        let bullets = &mut self.bullets;
-        for bullet in bullets {
-            if bullet.movement( map ){
-                bullets.remove(bullet);
-            }
-        }
-
-         */
     }
+    
     pub fn draw(&self, mouse_pos: Vec2, player_pos: &Vec2) {
         let rotation_vec = mouse_pos - self.base.position;
         let rotation = rotation_vec.y.atan2(rotation_vec.x);

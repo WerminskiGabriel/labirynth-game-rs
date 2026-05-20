@@ -23,7 +23,7 @@ pub fn walls_collision(
     match direction {
         Directions::North => {
             if cell.is_north_wall()
-                && ((*tmp_pos - obj_radius - wall_size - offset) / cell_size).floor() != start_y_idx
+                && ((*tmp_pos - obj_radius - wall_size + offset) / cell_size).floor() != start_y_idx
             {
                 *tmp_pos = start_y_idx * cell_size + wall_size + obj_radius;
                 return true;

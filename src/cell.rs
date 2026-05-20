@@ -1,3 +1,4 @@
+use crate::CellStep::CellStep;
 use crate::cellMap::CellMap;
 use crate::directions::Directions;
 use crate::settings;
@@ -6,6 +7,8 @@ use macroquad::color::{BLUE, GREEN, RED};
 use macroquad::math::Vec2;
 use macroquad::prelude::draw_line;
 use macroquad::rand;
+use macroquad::shapes::{draw_rectangle, draw_triangle};
+use std::any::Any;
 
 #[derive(Getters, MutGetters, Clone, Debug)]
 pub struct Cell {
@@ -13,6 +16,8 @@ pub struct Cell {
     //directions: [Directions; 4],
     #[getset(get = "pub", get_mut = "pub")]
     walls_bit: u8,
+    #[getset(get = "pub", get_mut = "pub")]
+    step: CellStep,
     //#[getset(get="pub", get_mut="pub")]
     // is_visited : bool,
 }
@@ -21,7 +26,8 @@ impl Cell {
         Self {
             //    directions: Self::gen_directions(),
             walls_bit: 0b1111, //NESW
-                               //is_visited: false,
+            step: CellStep::Unvisited,
+            //is_visited: false,
         }
     }
     pub fn gen_directions() -> [Directions; 4] {
@@ -152,6 +158,73 @@ impl Cell {
                 settings::menu::cell::COLOR,
             )
         }
+    }
+    pub fn draw_dir_to_finish(&self, x_pos: &f32, y_pos: &f32, tile_size: &f32, wall_size: &f32) {
+        let x_pos_2 = x_pos + tile_size / 2f32;
+        let x_pos_4 = x_pos + tile_size / 4f32;
+        let x_pos_3_4 = x_pos + tile_size * 3f32 / 4f32;
+
+        let y_pos_2 = y_pos + tile_size / 2f32;
+        let y_pos_4 = y_pos + tile_size / 4f32;
+        let y_pos_3_4 = y_pos + tile_size * 3f32 / 4f32;
+
+        match self.step {
+            CellStep::Direction(Directions::North) => {
+                draw_triangle(
+                    Vec2::new(x_pos_2, y_pos_4),
+                    Vec2::new(x_pos_4, y_pos_3_4),
+                    Vec2::new(x_pos_3_4, y_pos_3_4),
+                    BLUE,
+                );
+            }
+            CellStep::Direction(Directions::East) => {
+                draw_triangle(
+                    Vec2::new(x_pos_4, y_pos_4),
+                    Vec2::new(x_pos_4, y_pos_3_4),
+                    Vec2::new(x_pos_3_4, y_pos_2),
+                    BLUE,
+                );
+            }
+            CellStep::Direction(Directions::South) => {
+                draw_triangle(
+                    Vec2::new(x_pos_4, y_pos_4),
+                    Vec2::new(x_pos_3_4, y_pos_4),
+                    Vec2::new(x_pos_2, y_pos_3_4),
+                    BLUE,
+                );
+            }
+            CellStep::Direction(Directions::West) => {
+                draw_triangle(
+                    Vec2::new(x_pos_4, y_pos_2),
+                    Vec2::new(x_pos_3_4, y_pos_4),
+                    Vec2::new(x_pos_3_4, y_pos_3_4),
+                    BLUE,
+                );
+            }
+            CellStep::Finish => {
+                draw_triangle(
+                    Vec2::new(x_pos_4, y_pos_4),
+                    Vec2::new(x_pos_3_4, y_pos_4),
+                    Vec2::new(x_pos_2, y_pos_3_4),
+                    GREEN,
+                );
+                draw_triangle(
+                    Vec2::new(x_pos_2, y_pos_4),
+                    Vec2::new(x_pos_4, y_pos_3_4),
+                    Vec2::new(x_pos_3_4, y_pos_3_4),
+                    GREEN,
+                );
+            }
+            CellStep::Unvisited => {
+                draw_triangle(
+                    Vec2::new(x_pos_4, y_pos_4),
+                    Vec2::new(x_pos_4, y_pos_3_4),
+                    Vec2::new(x_pos_3_4, y_pos_2),
+                    RED,
+                );
+            }
+        };
+        //draw_rectangle(*x_pos + *tile_size, *y_pos + *tile_size, 10f32, 10f32, BLUE);
     }
 }
 

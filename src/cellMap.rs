@@ -1,4 +1,5 @@
 use crate::cell::Cell;
+use crate::directions::Directions;
 use crate::labyrinth::*;
 use crate::player::Player;
 use crate::settings;
@@ -31,6 +32,10 @@ impl CellMap {
         self.grid = vec![Cell::new(); self.width * self.height];
         self.gen_labyrinth();
     }
+    pub fn change_w_h(&mut self, w: usize, h: usize) {
+        self.height = h;
+        self.width = w;
+    }
 
     pub fn grid(&self, vec: Vec2) -> &Cell {
         &self.grid[vec.y as usize * self.width + vec.x as usize]
@@ -41,10 +46,7 @@ impl CellMap {
 }
 
 impl CellMap {
-    pub fn draw_playing(
-        &self,
-        player: &Player,
-    ) {
+    pub fn draw_playing(&self, player: &Player) {
         // --[CONSTS]--
         let tile_size: f32 = settings::cell::playing::SIZE;
         let wall_size: f32 = settings::cell::playing::THICKNESS;
@@ -71,6 +73,7 @@ impl CellMap {
 
                     let cell = self.grid(Vec2::new(col as f32, row as f32));
                     cell.draw_full(&x_pos, &y_pos, &tile_size, &wall_size);
+                    cell.draw_dir_to_finish(&x_pos, &y_pos, &tile_size, &wall_size);
                 }
             }
         }

@@ -5,6 +5,8 @@ use crate::weapons::Gun;
 use crate::{button, settings};
 use getset::{Getters, MutGetters};
 use macroquad::prelude::*;
+use crate::game::GameState::Completed;
+use crate::labyrinth::fill_path_to_finish;
 use crate::weapons::Drawable;
 
 enum GameState {
@@ -46,9 +48,13 @@ impl Game {
 
                 self.gun.update(Vec2::new(mouse_pos.0,mouse_pos.1), self.player.position() , &self.map );
                 self.gun.draw(Vec2::new(mouse_pos.0,mouse_pos.1), self.player.position());
-                self.player.draw();
 
+                self.player.draw();
                 self.player.update(&self.map);
+                if self.player.check_finish(&self.map) || !self.player.is_alive(){
+                    self.state = GameState::Menu;
+                }
+
             }
 
             GameState::Menu => {
@@ -68,12 +74,17 @@ impl Game {
                     "ENTER THE MAZE",
                     font.to_owned(),
                 ) {
+                    self.map.change_w_h(settings::map::playing::COLS,settings::map::playing::ROWS);
+                    self.map.change_labyrinth();
                     self.state = GameState::Playing;
+
+                    self.map.change_labyrinth()
                 }
+                /*
                 if *trigger <= get_time() {
                     self.map.change_labyrinth();
                     *trigger = get_time() + 0.5f64;
-                }
+                }*/
 
                 /*if is_mouse_button_pressed(MouseButton::Left) {
                     self.map.change_labyrinth();

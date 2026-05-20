@@ -30,10 +30,11 @@ impl Bullet {
         let step_size = 5f32;
         let steps = (bullet_speed / step_size).floor() + 1f32;
         let step_movement_vec = movement_vec / steps;
+        let mut is_collision : bool = false;
 
         for idx in 0..steps as usize {
             let tmp_pos = self.position + step_movement_vec;
-            
+
             let mut tmp_x = tmp_pos.x;
             let direction_x = if (tmp_x < window_w / 2f32) {
                 Directions::West
@@ -48,7 +49,7 @@ impl Bullet {
                 direction_x,
                 offset,
             ) {
-                return true;
+                is_collision = true;
             }
 
             let mut tmp_y = tmp_pos.y;
@@ -65,12 +66,14 @@ impl Bullet {
                 direction_y,
                 offset,
             ) {
-                return true;
+                is_collision = true;
             }
 
             self.position = Vec2::new(tmp_x, tmp_y);
+
         }
-        false
+        is_collision
+
     }
     pub fn draw(&self, player_pos: &Vec2) {
         let window_w = settings::window::WIDTH as f32;

@@ -1,6 +1,6 @@
 use macroquad::math::Vec2;
 
-#[derive(Clone, Copy, Debug)]
+#[derive(Clone, Copy, Debug,PartialEq)]
 pub enum Directions {
     North,
     East,
