@@ -13,7 +13,7 @@ use std::iter::Map;
 #[derive(Getters, MutGetters, Clone, Debug)]
 pub struct Player {
     #[getset(get = "pub", get_mut = "pub")]
-    HP: f32,
+    hp: f32,
     #[getset(get = "pub", get_mut = "pub")]
     position: Vec2,
     speed: f32,
@@ -22,7 +22,7 @@ pub struct Player {
 impl Player {
     pub fn new() -> Self {
         Self {
-            HP: settings::player::HP,
+            hp: settings::player::HP,
             position: Vec2::new(
                 settings::cell::playing::SIZE * settings::map::playing::COLS as f32 / 2f32,
                 settings::cell::playing::SIZE * settings::map::playing::ROWS as f32 / 2f32,
@@ -144,12 +144,12 @@ impl Player {
             );*/
         }
         if wall_collision {
-            self.HP -= settings::cell::playing::DMG;
+            self.hp -= settings::cell::playing::DMG;
         }
         self.position.y = tmp_y
     }
     pub fn is_alive(&self) -> bool {
-        return self.HP >= 0f32;
+        return self.hp >= 0f32;
     }
 
     pub fn draw(&self) {
@@ -193,9 +193,9 @@ impl Player {
             settings::player::COLOR,
         );
         draw_rectangle(
-            settings::window::WIDTH as f32 / 2f32 - settings::player::SIZE + thickness / 2f32 ,
-            settings::window::HEIGHT as f32 / 2f32 + settings::player::SIZE * 2f32 + thickness /2f32 ,
-            (settings::player::SIZE * 2f32 - thickness) * ( self.HP / settings::player::HP),
+            settings::window::WIDTH as f32 / 2f32 - settings::player::SIZE + thickness / 2f32,
+            settings::window::HEIGHT as f32 / 2f32 + settings::player::SIZE * 2f32 + thickness /2f32,
+            (settings::player::SIZE * 2f32 - thickness) * ( self.hp / settings::player::HP),
             settings::player::SIZE / 2f32 - thickness,
             settings::cell::playing::COLOR,
         )

@@ -9,7 +9,7 @@ pub fn walls_collision(
     tmp_pos: &mut f32,
     map: &CellMap,
     direction: Directions,
-    offset: f32 ,
+    offset: f32,
 ) -> bool {
     let wall_size = settings::cell::playing::THICKNESS;
     let cell_size = settings::cell::playing::SIZE;

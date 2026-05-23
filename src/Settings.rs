@@ -41,10 +41,23 @@ pub mod player {
     pub const WIDTH: f32 = SIZE / 2f32;
     pub const HEIGHT: f32 = SIZE * 2f32;
     pub const COLOR: Color = COLOR_BEIGE;
-    pub const HP : f32 = 200f32;
+    pub const HP: f32 = 200f32;
+}
 
+pub mod enemy {
+    use super::*;
 
-    
+    pub const MAX_COUNT: usize = 1000usize;
+    pub mod ghost {
+        use macroquad::math::Vec2;
+
+        pub const SPEED: f32 = 2f32;
+        pub const HP: f32 = 200f32;
+        pub const DMG_RADIUS: f32 = 100f32;
+        pub const DMG: f32 = 2f32;
+        pub const SIZE: f32 = 30f32;
+        pub const COOLDOWN: f32 = 2f32;
+    }
 }
 pub mod window {
     use super::*;
@@ -53,15 +66,13 @@ pub mod window {
     pub const HEIGHT: i32 = 900;
 }
 
-
 pub mod bullet {
     use super::*;
 
-    pub const LIFETIME : f32 = 10f32;
-    pub const SIZE : f32 = player::SIZE * 0.5f32;
-    pub const COLOR : Color = COLOR_BEIGE;
-    pub const SPEED : f32 = 2f32 * SIZE;
-
+    pub const LIFETIME: f32 = 10f32;
+    pub const SIZE: f32 = player::SIZE * 0.5f32;
+    pub const COLOR: Color = COLOR_BEIGE;
+    pub const SPEED: f32 = 2f32 * SIZE;
 }
 pub mod cell {
     use super::*;
@@ -74,13 +85,13 @@ pub mod cell {
         pub const SIZE: f32 = 300f32;
         pub const THICKNESS: f32 = 30f32;
         pub const COLOR: Color = COLOR_RED;
-        pub const DMG : f32 = 2f32;
+        pub const DMG: f32 = 2f32;
     }
 }
 
 pub mod map {
     use super::*;
-    pub mod playing{
+    pub mod playing {
         use super::*;
         pub const COLS: usize = 101usize;
         pub const ROWS: usize = 101usize;

@@ -5,6 +5,7 @@ use crate::weapons::Gun;
 use crate::{button, settings};
 use getset::{Getters, MutGetters};
 use macroquad::prelude::*;
+use crate::enemy::{gen_new_enemies, Enemy};
 use crate::game::GameState::Completed;
 use crate::labyrinth::fill_path_to_finish;
 use crate::weapons::Drawable;
@@ -25,6 +26,7 @@ pub struct Game {
     map: CellMap,
     player: Player,
     gun: Gun,
+    enemies : Vec<Enemy>,
 }
 
 impl Game {
@@ -34,6 +36,7 @@ impl Game {
             map: CellMap::new(cols, rows),
             player: Player::new(),
             gun: Gun::new(),
+            enemies : gen_new_enemies(),
         }
     }
 }
@@ -53,6 +56,17 @@ impl Game {
                 self.player.update(&self.map);
                 if self.player.check_finish(&self.map) || !self.player.is_alive(){
                     self.state = GameState::Menu;
+                }
+
+                for enemy in &self.enemies {
+                    enemy.draw(self.player.position());
+                }
+                let ft = get_frame_time();
+                for  mut enemy in &mut self.enemies {
+                    
+                    if enemy.update(self.player.position(),ft ){
+                        *self.player.hp_mut() -= settings::enemy::ghost::DMG;
+                    }
                 }
 
             }

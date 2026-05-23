@@ -11,6 +11,7 @@ mod weapons;
 mod Bullet;
 mod collisions;
 mod CellStep;
+mod enemy;
 
 use crate::cellMap::CellMap;
 use game::*;
