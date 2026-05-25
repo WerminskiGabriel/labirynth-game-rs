@@ -6,13 +6,14 @@ use rand::random;
 
 pub enum EnemyType {
     Ghost,
+    Goblin,
 }
 
 pub struct Enemy {
     position: Vec2,
     hp: f32,
-    enemy_type: EnemyType,
     dmg_cooldown: f32,
+    enemy_type: EnemyType,
 }
 
 impl Enemy {
@@ -21,22 +22,36 @@ impl Enemy {
             position,
             hp: match enemy_type {
                 EnemyType::Ghost => settings::enemy::ghost::HP,
+                EnemyType::Goblin => settings::enemy::goblin::HP,
+            },
+            dmg_cooldown: match enemy_type {
+                EnemyType::Ghost => settings::enemy::ghost::COOLDOWN,
+                EnemyType::Goblin => settings::enemy::goblin::COOLDOWN,
             },
             enemy_type,
-            dmg_cooldown:  settings::enemy::ghost::COOLDOWN,
         }
     }
 
     pub fn update(&mut self, player_pos: &Vec2, ft: f32) -> bool {
-        self.dmg_cooldown -= ft;
-        let movement_vec = (*player_pos - self.position);
+        // returns true if collision occurred and false elsewhere
+        match self.enemy_type {
+            EnemyType::Ghost => {
+                self.dmg_cooldown -= ft;
+                let movement_vec = (*player_pos - self.position);
 
-        if movement_vec.length() <= settings::enemy::ghost::SIZE && self.dmg_cooldown <= 0f32 {
-            // can change len to len squared for better performance
-            self.dmg_cooldown = settings::enemy::ghost::COOLDOWN;
-            return true;
-        }
-        self.position += movement_vec.normalize() * settings::enemy::ghost::SPEED;
+                if movement_vec.length_squared()
+                    <= (settings::enemy::ghost::SIZE * settings::enemy::ghost::SIZE)
+                    && self.dmg_cooldown <= 0f32
+                {
+                    self.dmg_cooldown = settings::enemy::ghost::COOLDOWN;
+                    return true;
+                }
+                self.position += movement_vec.normalize() * settings::enemy::ghost::SPEED;
+            }
+            EnemyType::Goblin => {
+                
+            }
+        };
 
         return false;
     }

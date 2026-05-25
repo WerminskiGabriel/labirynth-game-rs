@@ -5,6 +5,7 @@ use crate::player::Player;
 use crate::settings;
 use getset::{Getters, MutGetters};
 use macroquad::prelude::*;
+use crate::sprites::Sprites;
 
 #[derive(Getters, MutGetters)]
 pub struct CellMap {
@@ -46,7 +47,7 @@ impl CellMap {
 }
 
 impl CellMap {
-    pub fn draw_playing(&self, player: &Player) {
+    pub fn draw_playing(&self, player: &Player, sprites: &Sprites) {
         // --[CONSTS]--
         let tile_size: f32 = settings::cell::playing::SIZE;
         let wall_size: f32 = settings::cell::playing::THICKNESS;
@@ -72,7 +73,8 @@ impl CellMap {
                     let y_pos = row as f32 * tile_size - camera_y_tl;
 
                     let cell = self.grid(Vec2::new(col as f32, row as f32));
-                    cell.draw_full(&x_pos, &y_pos, &tile_size, &wall_size);
+                    cell.draw_sprite( sprites, &x_pos, &y_pos, &tile_size);
+                    //cell.draw_full(&x_pos, &y_pos, &tile_size, &wall_size);
                     cell.draw_dir_to_finish(&x_pos, &y_pos, &tile_size, &wall_size);
                 }
             }

@@ -49,7 +49,17 @@ pub mod enemy {
 
     pub const MAX_COUNT: usize = 1000usize;
     pub mod ghost {
-        use macroquad::math::Vec2;
+        use super::*;
+
+        pub const SPEED: f32 = 2f32;
+        pub const HP: f32 = 200f32;
+        pub const DMG_RADIUS: f32 = 100f32;
+        pub const DMG: f32 = 2f32;
+        pub const SIZE: f32 = 30f32;
+        pub const COOLDOWN: f32 = 2f32;
+    }
+    pub mod goblin {
+        use super::*;
 
         pub const SPEED: f32 = 2f32;
         pub const HP: f32 = 200f32;
@@ -82,7 +92,7 @@ pub mod cell {
         use super::*;
         use crate::settings::COLOR_RED;
         use macroquad::color::Color;
-        pub const SIZE: f32 = 300f32;
+        pub const SIZE: f32 = 320f32;
         pub const THICKNESS: f32 = 30f32;
         pub const COLOR: Color = COLOR_RED;
         pub const DMG: f32 = 2f32;

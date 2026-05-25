@@ -2,12 +2,9 @@ use crate::CellStep::CellStep;
 use crate::cellMap::CellMap;
 use crate::directions::Directions;
 use crate::settings;
+use crate::sprites::Sprites;
 use getset::{Getters, MutGetters};
-use macroquad::color::{BLUE, GREEN, RED};
-use macroquad::math::Vec2;
-use macroquad::prelude::draw_line;
-use macroquad::rand;
-use macroquad::shapes::{draw_rectangle, draw_triangle};
+use macroquad::prelude::*;
 use std::any::Any;
 
 #[derive(Getters, MutGetters, Clone, Debug)]
@@ -90,6 +87,107 @@ impl Cell {
 
 impl Cell {
     pub fn update(&mut self) {}
+    pub fn draw_sprite(&self, sprites: &Sprites, x_pos: &f32, y_pos: &f32, tile_size: &f32) {
+        let dest_size = Some(Vec2::new(
+            settings::cell::playing::SIZE,
+            settings::cell::playing::SIZE,
+        ));
+
+        let rotation: Option<f32> = match self.walls_bit & 0b1111 {
+            // one wall is empty
+            0b0111 => Some(std::f32::consts::PI),
+            0b1011 => Some(-1f32 / 2f32 * std::f32::consts::PI),
+            0b1101 => Some(0f32 * std::f32::consts::PI),
+            0b1110 => Some(1f32 / 2f32 * std::f32::consts::PI),
+            _ => None,
+        };
+        if rotation.is_some() {
+            draw_texture_ex(
+                &sprites.wall_tlr,
+                *x_pos,
+                *y_pos,
+                WHITE,
+                DrawTextureParams {
+                    dest_size,
+                    source: None,
+                    rotation: rotation.unwrap(),
+                    flip_x: false,
+                    flip_y: false,
+                    pivot: None,
+                },
+            )
+        } else {
+            let rotation: Option<f32> = match self.walls_bit & 0b1111 {
+                0b1001 => Some(0f32),
+                0b1100 => Some(-1.5f32 * std::f32::consts::PI),
+                0b0110 => Some(1f32 * std::f32::consts::PI),
+                0b0011 => Some(-0.5f32 * std::f32::consts::PI),
+                _ => None,
+            };
+            if rotation.is_some() {
+                draw_texture_ex(
+                    &sprites.wall_tl,
+                    *x_pos,
+                    *y_pos,
+                    WHITE,
+                    DrawTextureParams {
+                        dest_size,
+                        source: None,
+                        rotation: rotation.unwrap(),
+                        flip_x: false,
+                        flip_y: false,
+                        pivot: None,
+                    },
+                )
+            } else {
+                let rotation: Option<f32> = match self.walls_bit & 0b1111 {
+                    0b1000 => Some(0f32),
+                    0b0100 => Some(0.5f32 * std::f32::consts::PI),
+                    0b0010 => Some(1f32 * std::f32::consts::PI),
+                    0b0001 => Some(1.5f32 * std::f32::consts::PI),
+                    _ => None,
+                };
+                if rotation.is_some() {
+                    draw_texture_ex(
+                        &sprites.wall_t,
+                        *x_pos,
+                        *y_pos,
+                        WHITE,
+                        DrawTextureParams {
+                            dest_size,
+                            source: None,
+                            rotation: rotation.unwrap(),
+                            flip_x: false,
+                            flip_y: false,
+                            pivot: None,
+                        },
+                    )
+                } else {
+                    let rotation: Option<f32> = match self.walls_bit & 0b1111 {
+                        0b1010 => Some(0f32),
+                        0b0101 => Some(0.5f32 * std::f32::consts::PI),
+                        _ => None,
+                    };
+                    if rotation.is_some() {
+                        draw_texture_ex(
+                            &sprites.wall_tb,
+                            *x_pos,
+                            *y_pos,
+                            WHITE,
+                            DrawTextureParams {
+                                dest_size,
+                                source: None,
+                                rotation: rotation.unwrap(),
+                                flip_x: false,
+                                flip_y: false,
+                                pivot: None,
+                            },
+                        )
+                    }
+                }
+            }
+        }
+    }
 
     pub fn draw_full(&self, x_pos: &f32, y_pos: &f32, tile_size: &f32, wall_size: &f32) {
         if self.walls_bit() & 0b1000 != 0 {
@@ -102,7 +200,6 @@ impl Cell {
                 settings::menu::cell::COLOR,
             )
         }
-
         if self.walls_bit() & 0b0100 != 0 {
             draw_line(
                 *x_pos + tile_size,

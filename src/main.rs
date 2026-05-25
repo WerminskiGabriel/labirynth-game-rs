@@ -12,6 +12,7 @@ mod Bullet;
 mod collisions;
 mod CellStep;
 mod enemy;
+mod sprites;
 
 use crate::cellMap::CellMap;
 use game::*;
@@ -19,6 +20,7 @@ use macroquad::prelude::*;
 use std::time::Duration;
 use std::{thread, vec};
 use crate::labyrinth::fill_path_to_finish;
+use crate::sprites::Sprites;
 
 fn window_config() -> Conf {
     Conf {
@@ -32,7 +34,8 @@ fn window_config() -> Conf {
 
 #[macroquad::main(window_config)]
 async fn main() {
-    let mut game = Game::new(settings::menu::map::ROWS, settings::menu::map::COLS);
+    let sprites = Sprites::load().await;
+    let mut game = Game::new(settings::menu::map::ROWS, settings::menu::map::COLS,sprites);
     let font = load_ttf_font("media/Akzidenz_Grotesk_Next_Bold.otf")
         .await
         .unwrap();
