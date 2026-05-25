@@ -1,15 +1,15 @@
 use crate::cell::Cell;
 use crate::cellMap::CellMap;
+use crate::enemy::{Enemy, gen_new_enemies};
+use crate::game::GameState::Completed;
+use crate::labyrinth::fill_path_to_finish;
 use crate::player::Player;
+use crate::sprites::Sprites;
+use crate::weapons::Drawable;
 use crate::weapons::Gun;
 use crate::{button, settings};
 use getset::{Getters, MutGetters};
 use macroquad::prelude::*;
-use crate::enemy::{gen_new_enemies, Enemy};
-use crate::game::GameState::Completed;
-use crate::labyrinth::fill_path_to_finish;
-use crate::sprites::Sprites;
-use crate::weapons::Drawable;
 
 enum GameState {
     Menu,
@@ -27,18 +27,18 @@ pub struct Game {
     map: CellMap,
     player: Player,
     gun: Gun,
-    enemies : Vec<Enemy>,
-    sprites : Sprites
+    enemies: Vec<Enemy>,
+    sprites: Sprites,
 }
 
 impl Game {
-    pub fn new(cols: usize, rows: usize, sprites : Sprites) -> Self {
+    pub fn new(cols: usize, rows: usize, sprites: Sprites) -> Self {
         Self {
-            state: GameState::Playing,
+            state: GameState::Menu,
             map: CellMap::new(cols, rows),
             player: Player::new(),
             gun: Gun::new(),
-            enemies : gen_new_enemies(),
+            enemies: gen_new_enemies(),
             sprites,
         }
     }
@@ -52,12 +52,17 @@ impl Game {
 
                 self.map.draw_playing(&self.player, &self.sprites);
 
-                self.gun.update(Vec2::new(mouse_pos.0,mouse_pos.1), self.player.position() , &self.map );
-                self.gun.draw(Vec2::new(mouse_pos.0,mouse_pos.1), self.player.position());
+                self.gun.update(
+                    Vec2::new(mouse_pos.0, mouse_pos.1),
+                    self.player.position(),
+                    &self.map,
+                );
+                self.gun
+                    .draw(Vec2::new(mouse_pos.0, mouse_pos.1), self.player.position());
 
                 self.player.draw();
                 self.player.update(&self.map);
-                if self.player.check_finish(&self.map) || !self.player.is_alive(){
+                if self.player.check_finish(&self.map) || !self.player.is_alive() {
                     self.state = GameState::Menu;
                 }
 
@@ -65,13 +70,12 @@ impl Game {
                     enemy.draw(self.player.position());
                 }
                 let ft = get_frame_time();
-                /*
+
                 for  mut enemy in &mut self.enemies {
-                    if enemy.update(self.player.position(),ft ){
+                    if enemy.update(self.player.position(),ft, &self.map ){
                         *self.player.hp_mut() -= settings::enemy::ghost::DMG;
                     }
-                }*/
-
+                }
             }
 
             GameState::Menu => {
@@ -91,11 +95,13 @@ impl Game {
                     "ENTER THE MAZE",
                     font.to_owned(),
                 ) {
-                    self.map.change_w_h(settings::map::playing::COLS,settings::map::playing::ROWS);
+                    self.map
+                        .change_w_h(settings::map::playing::COLS, settings::map::playing::ROWS);
                     self.map.change_labyrinth();
                     self.state = GameState::Playing;
-
-                    self.map.change_labyrinth()
+                    self.map.change_labyrinth();
+                    fill_path_to_finish(self.map_mut(),Vec2::new(0f32,0f32));
+                    self.map.gen_enemy_grid();
                 }
                 /*
                 if *trigger <= get_time() {

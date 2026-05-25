@@ -1,6 +1,6 @@
 use crate::directions::Directions;
 
-#[derive(Clone, Debug,PartialEq)]
+#[derive(Clone, Copy, Debug,PartialEq)]
 pub enum CellStep{
     Unvisited,
     Direction(Directions),

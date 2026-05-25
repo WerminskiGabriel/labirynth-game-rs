@@ -41,7 +41,7 @@ pub mod player {
     pub const WIDTH: f32 = SIZE / 2f32;
     pub const HEIGHT: f32 = SIZE * 2f32;
     pub const COLOR: Color = COLOR_BEIGE;
-    pub const HP: f32 = 200f32;
+    pub const HP: f32 = 20000000f32;
 }
 
 pub mod enemy {
@@ -61,7 +61,7 @@ pub mod enemy {
     pub mod goblin {
         use super::*;
 
-        pub const SPEED: f32 = 2f32;
+        pub const SPEED: f32 = 5f32;
         pub const HP: f32 = 200f32;
         pub const DMG_RADIUS: f32 = 100f32;
         pub const DMG: f32 = 2f32;

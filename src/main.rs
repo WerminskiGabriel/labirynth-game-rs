@@ -45,6 +45,7 @@ async fn main() {
 
     fill_path_to_finish(game.map_mut(),Vec2::new(0f32,0f32));
 
+
     loop {
         clear_background(settings::ui::BACKGROUND_COLOR);
         game.update(&font, &mut next_trigger);

@@ -3,9 +3,10 @@ use crate::directions::Directions;
 use crate::labyrinth::*;
 use crate::player::Player;
 use crate::settings;
+use crate::sprites::Sprites;
 use getset::{Getters, MutGetters};
 use macroquad::prelude::*;
-use crate::sprites::Sprites;
+use crate::CellStep::CellStep;
 
 #[derive(Getters, MutGetters)]
 pub struct CellMap {
@@ -14,6 +15,7 @@ pub struct CellMap {
     #[getset(get = "pub", get_mut = "pub")]
     height: usize,
     grid: Vec<Cell>,
+    enemy_grid: Option<Vec<Vec<CellStep>>>,
 }
 
 impl CellMap {
@@ -24,8 +26,19 @@ impl CellMap {
             width,
             height,
             grid: vec![Cell::new(); width * height],
+            enemy_grid: None,
         }
     }
+    pub fn gen_enemy_grid(&mut self) {
+        self.enemy_grid = Some(fill_enemy_grid(self));
+    }
+    pub fn enemy_grid(&self, enemy_pos: Vec2, player_pos: Vec2) -> &CellStep {
+        &self.enemy_grid.as_ref().unwrap()[player_pos.y as usize * self.width + player_pos.x as usize][enemy_pos.y as usize * self.width + enemy_pos.x as usize]
+    }
+    pub fn enemy_grid_mut(&mut self, enemy_pos: Vec2, player_pos: Vec2) -> &mut CellStep {
+        &mut self.enemy_grid.as_mut().unwrap()[player_pos.y as usize * self.width + player_pos.x as usize][enemy_pos.y as usize * self.width + enemy_pos.x as usize]
+    }
+
     pub fn gen_labyrinth(&mut self) {
         gen_labyrinth(self);
     }
@@ -73,7 +86,7 @@ impl CellMap {
                     let y_pos = row as f32 * tile_size - camera_y_tl;
 
                     let cell = self.grid(Vec2::new(col as f32, row as f32));
-                    cell.draw_sprite( sprites, &x_pos, &y_pos, &tile_size);
+                    cell.draw_sprite(sprites, &x_pos, &y_pos, &tile_size);
                     //cell.draw_full(&x_pos, &y_pos, &tile_size, &wall_size);
                     cell.draw_dir_to_finish(&x_pos, &y_pos, &tile_size, &wall_size);
                 }
