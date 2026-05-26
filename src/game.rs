@@ -49,18 +49,20 @@ impl Game {
         match self.state {
             GameState::Playing => {
                 let mouse_pos = mouse_position();
+                let mouse_pos = Vec2::new(mouse_pos.0,mouse_pos.1);
 
                 self.map.draw_playing(&self.player, &self.sprites);
 
                 self.gun.update(
-                    Vec2::new(mouse_pos.0, mouse_pos.1),
+                    //Vec2::new(mouse_pos.0, mouse_pos.1),
+                    mouse_pos,
                     self.player.position(),
                     &self.map,
                 );
                 self.gun
-                    .draw(Vec2::new(mouse_pos.0, mouse_pos.1), self.player.position());
+                    .draw(mouse_pos, self.player.position());
 
-                self.player.draw();
+                self.player.draw(&self.sprites, mouse_pos);
                 self.player.update(&self.map);
                 if self.player.check_finish(&self.map) || !self.player.is_alive() {
                     self.state = GameState::Menu;

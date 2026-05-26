@@ -75,6 +75,7 @@ impl Gun {
             bullet.draw(player_pos);
         }
 
+        /*
         draw_rectangle_ex(
             self.base.position.x,
             self.base.position.y,
@@ -85,6 +86,6 @@ impl Gun {
                 rotation,
                 color: self.base.color,
             },
-        );
+        );*/
     }
 }

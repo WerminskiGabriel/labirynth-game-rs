@@ -101,9 +101,10 @@ impl Cell {
             0b1110 => Some(1f32 / 2f32 * std::f32::consts::PI),
             _ => None,
         };
+
         if rotation.is_some() {
             draw_texture_ex(
-                &sprites.wall_tlr,
+                &sprites.walls.wall_tlr,
                 *x_pos,
                 *y_pos,
                 WHITE,
@@ -126,7 +127,7 @@ impl Cell {
             };
             if rotation.is_some() {
                 draw_texture_ex(
-                    &sprites.wall_tl,
+                    &sprites.walls.wall_tl,
                     *x_pos,
                     *y_pos,
                     WHITE,
@@ -149,7 +150,7 @@ impl Cell {
                 };
                 if rotation.is_some() {
                     draw_texture_ex(
-                        &sprites.wall_t,
+                        &sprites.walls.wall_t,
                         *x_pos,
                         *y_pos,
                         WHITE,
@@ -170,7 +171,7 @@ impl Cell {
                     };
                     if rotation.is_some() {
                         draw_texture_ex(
-                            &sprites.wall_tb,
+                            &sprites.walls.wall_tb,
                             *x_pos,
                             *y_pos,
                             WHITE,
@@ -256,72 +257,41 @@ impl Cell {
             )
         }
     }
-    pub fn draw_dir_to_finish(&self, x_pos: &f32, y_pos: &f32, tile_size: &f32, wall_size: &f32) {
-        let x_pos_2 = x_pos + tile_size / 2f32;
-        let x_pos_4 = x_pos + tile_size / 4f32;
-        let x_pos_3_4 = x_pos + tile_size * 3f32 / 4f32;
+    pub fn draw_dir_to_finish(
+        &self,
+        x_pos: &f32,
+        y_pos: &f32,
+        tile_size: &f32,
+        wall_size: &f32,
+        sprites: &Sprites,
+    ) {
 
-        let y_pos_2 = y_pos + tile_size / 2f32;
-        let y_pos_4 = y_pos + tile_size / 4f32;
-        let y_pos_3_4 = y_pos + tile_size * 3f32 / 4f32;
-
-        match self.step {
-            CellStep::Direction(Directions::North) => {
-                draw_triangle(
-                    Vec2::new(x_pos_2, y_pos_4),
-                    Vec2::new(x_pos_4, y_pos_3_4),
-                    Vec2::new(x_pos_3_4, y_pos_3_4),
-                    BLUE,
-                );
-            }
-            CellStep::Direction(Directions::East) => {
-                draw_triangle(
-                    Vec2::new(x_pos_4, y_pos_4),
-                    Vec2::new(x_pos_4, y_pos_3_4),
-                    Vec2::new(x_pos_3_4, y_pos_2),
-                    BLUE,
-                );
-            }
-            CellStep::Direction(Directions::South) => {
-                draw_triangle(
-                    Vec2::new(x_pos_4, y_pos_4),
-                    Vec2::new(x_pos_3_4, y_pos_4),
-                    Vec2::new(x_pos_2, y_pos_3_4),
-                    BLUE,
-                );
-            }
-            CellStep::Direction(Directions::West) => {
-                draw_triangle(
-                    Vec2::new(x_pos_4, y_pos_2),
-                    Vec2::new(x_pos_3_4, y_pos_4),
-                    Vec2::new(x_pos_3_4, y_pos_3_4),
-                    BLUE,
-                );
-            }
-            CellStep::Finish => {
-                draw_triangle(
-                    Vec2::new(x_pos_4, y_pos_4),
-                    Vec2::new(x_pos_3_4, y_pos_4),
-                    Vec2::new(x_pos_2, y_pos_3_4),
-                    GREEN,
-                );
-                draw_triangle(
-                    Vec2::new(x_pos_2, y_pos_4),
-                    Vec2::new(x_pos_4, y_pos_3_4),
-                    Vec2::new(x_pos_3_4, y_pos_3_4),
-                    GREEN,
-                );
-            }
-            CellStep::Unvisited => {
-                draw_triangle(
-                    Vec2::new(x_pos_4, y_pos_4),
-                    Vec2::new(x_pos_4, y_pos_3_4),
-                    Vec2::new(x_pos_3_4, y_pos_2),
-                    RED,
-                );
-            }
+        let rotation = match self.step {
+            CellStep::Direction(Directions::North) => {std::f32::consts::PI *1.5f32 },
+            CellStep::Direction(Directions::East) => {0f32},
+            CellStep::Direction(Directions::South) => {std::f32::consts::PI /2f32 },
+            CellStep::Direction(Directions::West) => {std::f32::consts::PI },
+            CellStep::Finish => {std::f32::consts::PI},
+            CellStep::Unvisited => {std::f32::consts::PI},
         };
-        //draw_rectangle(*x_pos + *tile_size, *y_pos + *tile_size, 10f32, 10f32, BLUE);
+
+
+        let dest_size = Vec2::new(settings::cell::playing::SIZE, settings::cell::playing::SIZE) ;
+        draw_texture_ex(
+            &sprites.arrow,
+            *x_pos ,//+ dest_size.x,
+            *y_pos,//  + dest_size.y,
+            WHITE,
+            DrawTextureParams {
+                dest_size : Some(dest_size), // Some(dest_size),
+                source: None,
+                rotation: rotation,
+                flip_x: false,
+                flip_y: false,
+                pivot: None,
+            },
+        );
+
     }
 }
 

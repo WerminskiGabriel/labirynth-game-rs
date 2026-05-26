@@ -43,7 +43,7 @@ async fn main() {
     game.map_mut().gen_labyrinth();
     let mut next_trigger = get_time() + 0.5f64;
 
-    fill_path_to_finish(game.map_mut(),Vec2::new(0f32,0f32));
+    //fill_path_to_finish(game.map_mut(),Vec2::new(0f32,0f32));
 
 
     loop {

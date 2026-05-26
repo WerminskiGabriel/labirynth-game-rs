@@ -88,7 +88,7 @@ impl CellMap {
                     let cell = self.grid(Vec2::new(col as f32, row as f32));
                     cell.draw_sprite(sprites, &x_pos, &y_pos, &tile_size);
                     //cell.draw_full(&x_pos, &y_pos, &tile_size, &wall_size);
-                    cell.draw_dir_to_finish(&x_pos, &y_pos, &tile_size, &wall_size);
+                    cell.draw_dir_to_finish(&x_pos, &y_pos, &tile_size, &wall_size, sprites);
                 }
             }
         }

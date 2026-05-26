@@ -4,6 +4,7 @@ use crate::cellMap::CellMap;
 use crate::collisions::walls_collision;
 use crate::directions::Directions;
 use crate::settings;
+use crate::sprites::Sprites;
 use getset::{Getters, MutGetters};
 use macroquad::input::KeyCode::S;
 use macroquad::miniquad::start;
@@ -152,13 +153,45 @@ impl Player {
         return self.hp >= 0f32;
     }
 
-    pub fn draw(&self) {
+    pub fn draw(&self, sprites: &Sprites, mouse_pos: Vec2) {
+        let screen_center = Vec2::new(
+            settings::window::WIDTH as f32 / 2f32,
+            settings::window::HEIGHT as f32 / 2f32,
+        );
+
+        let dest_size = Vec2::new(settings::player::SIZE, settings::player::SIZE)  *5f32 ;
+
+        let player_pos = Vec2::new(
+            settings::window::WIDTH as f32 / 2f32,
+            settings::window::HEIGHT as f32 / 2f32,
+        );
+
+        let rotation_vec = mouse_pos - player_pos;
+        let rotation = rotation_vec.y.atan2(rotation_vec.x) - std::f32::consts::PI / 2f32;
+
+        let player_pos = screen_center- (dest_size / 2f32);
+
+        draw_texture_ex(
+            &sprites.player,
+            player_pos.x,
+            player_pos.y,
+            WHITE,
+            DrawTextureParams {
+                dest_size: Some(dest_size),
+                source: None,
+                rotation: rotation,
+                flip_x: false,
+                flip_y: false,
+                pivot: None,
+            },
+        );
+        /*
         draw_circle(
             settings::window::WIDTH as f32 / 2f32,
             settings::window::HEIGHT as f32 / 2f32,
             settings::player::SIZE,
             settings::player::COLOR,
-        );
+        );*/
 
         Self::draw_hp_bar(self);
 
@@ -194,8 +227,10 @@ impl Player {
         );
         draw_rectangle(
             settings::window::WIDTH as f32 / 2f32 - settings::player::SIZE + thickness / 2f32,
-            settings::window::HEIGHT as f32 / 2f32 + settings::player::SIZE * 2f32 + thickness /2f32,
-            (settings::player::SIZE * 2f32 - thickness) * ( self.hp / settings::player::HP),
+            settings::window::HEIGHT as f32 / 2f32
+                + settings::player::SIZE * 2f32
+                + thickness / 2f32,
+            (settings::player::SIZE * 2f32 - thickness) * (self.hp / settings::player::HP),
             settings::player::SIZE / 2f32 - thickness,
             settings::cell::playing::COLOR,
         )

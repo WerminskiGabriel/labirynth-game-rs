@@ -1,4 +1,35 @@
 use macroquad::prelude::*;
+
+const COLOR_A: Color = Color {
+    r: 128f32 / 255.0,
+    g: 124f32 / 255.0,
+    b: 121f32 / 255.0,
+    a: 1f32,
+};
+const COLOR_B: Color = Color {
+    r: 122f32 / 255.0,
+    g: 111f32 / 255.0,
+    b: 111f32 / 255.0,
+    a: 1f32,
+};
+const COLOR_C: Color = Color {
+    r: 83f32 / 255.0,
+    g: 90f32 / 255.0,
+    b: 99f32 / 255.0,
+    a: 1f32,
+};
+const COLOR_D: Color = Color {
+    r: 57f32 / 255.0,
+    g: 574f32 / 255.0,
+    b: 75f32 / 255.0,
+    a: 1f32,
+};
+const COLOR_E: Color = Color {
+    r: 29f32 / 255.0,
+    g: 29f32 / 255.0,
+    b: 46f32 / 255.0,
+    a: 1f32,
+};
 const COLOR_RED: Color = Color {
     r: 219f32 / 255.0,
     g: 61f32 / 255.0,
@@ -31,17 +62,18 @@ const COLOR_BEIGE: Color = Color {
     a: 1f32,
 };
 
+
 pub mod player {
     use super::*;
 
     pub const SPEED: f32 = 12f32;
     pub const SPEED_FAST: f32 = 22f32;
-    pub const SIZE: f32 = 30f32;
+    pub const SIZE: f32 = 40f32;
 
     pub const WIDTH: f32 = SIZE / 2f32;
     pub const HEIGHT: f32 = SIZE * 2f32;
-    pub const COLOR: Color = COLOR_BEIGE;
-    pub const HP: f32 = 20000000f32;
+    pub const COLOR: Color = COLOR_B;
+    pub const HP: f32 = 2000f32;
 }
 
 pub mod enemy {
@@ -61,7 +93,7 @@ pub mod enemy {
     pub mod goblin {
         use super::*;
 
-        pub const SPEED: f32 = 10f32;
+        pub const SPEED: f32 = 5f32;
         pub const HP: f32 = 200f32;
         pub const DMG_RADIUS: f32 = 100f32;
         pub const DMG: f32 = 2f32;
@@ -81,7 +113,7 @@ pub mod bullet {
 
     pub const LIFETIME: f32 = 10f32;
     pub const SIZE: f32 = player::SIZE * 0.5f32;
-    pub const COLOR: Color = COLOR_BEIGE;
+    pub const COLOR: Color = COLOR_B;
     pub const SPEED: f32 = 2f32 * SIZE;
 }
 pub mod cell {
@@ -94,7 +126,7 @@ pub mod cell {
         use macroquad::color::Color;
         pub const SIZE: f32 = 320f32;
         pub const THICKNESS: f32 = 30f32;
-        pub const COLOR: Color = COLOR_RED;
+        pub const COLOR: Color = COLOR_D;
         pub const DMG: f32 = 2f32;
     }
 }
@@ -128,7 +160,7 @@ pub mod menu {
     pub mod cell {
         use super::*;
         use crate::settings;
-        pub const COLOR: Color = COLOR_RED;
+        pub const COLOR: Color = COLOR_D;
         pub const THICKNESS: f32 = (SIZE * 0.6);
         pub const SIZE: f32 = map::WIDTH / settings::menu::map::ROWS as f32;
     }
@@ -142,17 +174,17 @@ pub mod menu {
         pub const FONT_COLOR: Color = COLOR_RED;
         pub const FONT_COLOR_HOVER: Color = COLOR_BLACK;
 
-        pub const COLOR: Color = COLOR_BLACK;
-        pub const COLOR_HOVER: Color = COLOR_RED;
-        pub const COLOR_LINES: Color = COLOR_BLACK2;
+        pub const COLOR: Color = COLOR_A;
+        pub const COLOR_HOVER: Color = COLOR_B;
+        pub const COLOR_LINES: Color = COLOR_E;
     }
 }
 
 pub mod ui {
     use super::*;
     pub const FONT_SIZE: u16 = 30u16;
-    pub const TEXT_COLOR: Color = COLOR_RED;
-    pub const BACKGROUND_COLOR: Color = COLOR_BLACK;
+    pub const TEXT_COLOR: Color = COLOR_A;
+    pub const BACKGROUND_COLOR: Color = COLOR_E;
 }
 
 pub mod button {
