@@ -71,7 +71,7 @@ impl Game {
                 }
                 let ft = get_frame_time();
 
-                for  mut enemy in &mut self.enemies {
+                for mut enemy in &mut self.enemies {
                     if enemy.update(self.player.position(),ft, &self.map ){
                         *self.player.hp_mut() -= settings::enemy::ghost::DMG;
                     }

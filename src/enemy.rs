@@ -51,36 +51,51 @@ impl Enemy {
                     self.dmg_cooldown = settings::enemy::ghost::COOLDOWN;
                     return true;
                 }
-                self.position += movement_vec.normalize() * settings::enemy::ghost::SPEED;
+                self.position += movement_vec.normalize() * settings::enemy::ghost::SPEED * ft;
             }
             EnemyType::Goblin => {
                 self.dmg_cooldown -= ft;
 
                 let move_speed = settings::enemy::goblin::SPEED;
+                let cell_size = settings::cell::playing::SIZE;
 
-                let enemy_idx = self.position / settings::cell::playing::SIZE;
-                let player_idx = *player_pos / settings::cell::playing::SIZE;
+                let enemy_idx = (self.position / settings::cell::playing::SIZE).floor();
+                let player_idx = (*player_pos / settings::cell::playing::SIZE).floor();
 
                 let curr_cell = map.enemy_grid(enemy_idx, player_idx);
-
-                let movement_vec = match curr_cell {
+                let movement_idx = match curr_cell {
                     CellStep::Direction(dir) => match dir {
-                        Directions::North => Vec2::new(0f32, -move_speed),
-                        Directions::East => Vec2::new(move_speed, 0f32),
-                        Directions::South => Vec2::new(0f32, move_speed),
-                        Directions::West => Vec2::new(-move_speed, 0f32),
+                        Directions::North => Vec2::new(0f32, -1f32),
+                        Directions::East => Vec2::new(1f32, 0f32),
+                        Directions::South => Vec2::new(0f32, 1f32),
+                        Directions::West => Vec2::new(-1f32, 0f32),
                     },
                     _ => Vec2::new(0f32, 0f32),
                 };
 
+                let dest_cell_center_pos = match curr_cell {
+                    CellStep::Finish => *player_pos,
+                    CellStep::Unvisited => *player_pos,
+                    _ => {
+                        ((enemy_idx + movement_idx) * settings::cell::playing::SIZE
+                            + Vec2::new(
+                                settings::cell::playing::SIZE / 2f32,
+                                settings::cell::playing::SIZE / 2f32,
+                            ))
+                    }
+                };
+
+                let movement_vec = (dest_cell_center_pos - self.position);
+
                 if movement_vec.length_squared()
                     <= (settings::enemy::goblin::SIZE * settings::enemy::goblin::SIZE)
                     && self.dmg_cooldown <= 0f32
-                {   self.dmg_cooldown = settings::enemy::goblin::COOLDOWN;
+                {
+                    self.dmg_cooldown = settings::enemy::goblin::COOLDOWN;
                     return true;
                 }
 
-                self.position += movement_vec;
+                self.position += movement_vec.normalize_or_zero() * move_speed;
             }
         };
 
