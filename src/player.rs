@@ -159,7 +159,7 @@ impl Player {
             settings::window::HEIGHT as f32 / 2f32,
         );
 
-        let dest_size = Vec2::new(settings::player::SIZE, settings::player::SIZE)  *5f32 ;
+        let dest_size = Vec2::new(settings::player::SIZE, settings::player::SIZE) * 5f32;
 
         let player_pos = Vec2::new(
             settings::window::WIDTH as f32 / 2f32,
@@ -169,7 +169,7 @@ impl Player {
         let rotation_vec = mouse_pos - player_pos;
         let rotation = rotation_vec.y.atan2(rotation_vec.x) - std::f32::consts::PI / 2f32;
 
-        let player_pos = screen_center- (dest_size / 2f32);
+        let player_pos = screen_center - (dest_size / 2f32);
 
         draw_texture_ex(
             &sprites.player,
@@ -232,7 +232,7 @@ impl Player {
                 + thickness / 2f32,
             (settings::player::SIZE * 2f32 - thickness) * (self.hp / settings::player::HP),
             settings::player::SIZE / 2f32 - thickness,
-            settings::cell::playing::COLOR,
+            settings::hp_bar::COLOR,
         )
     }
 }

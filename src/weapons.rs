@@ -1,13 +1,14 @@
 use crate::Bullet::Bullet;
-use crate::settings;
-use macroquad::color::Color;
-use macroquad::input::{MouseButton, is_mouse_button_pressed, is_key_pressed};
-use macroquad::math::Vec2;
-use macroquad::prelude::{DrawRectangleParams, draw_rectangle_ex, KeyCode};
-use macroquad::ui::widgets::Button;
-use std::hash::Hasher;
 use crate::cell::Cell;
 use crate::cellMap::CellMap;
+use crate::enemy::Enemy;
+use crate::settings;
+use macroquad::color::Color;
+use macroquad::input::{MouseButton, is_key_pressed, is_mouse_button_pressed, is_mouse_button_down};
+use macroquad::math::Vec2;
+use macroquad::prelude::{DrawRectangleParams, KeyCode, draw_rectangle_ex};
+use macroquad::ui::widgets::Button;
+use std::hash::Hasher;
 
 enum Weapon {
     Gun,
@@ -53,8 +54,14 @@ impl Gun {
     }
 }
 impl Gun {
-    pub fn update(&mut self, mouse_pos: Vec2, player_pos: &Vec2, map : &CellMap) {
-        if is_mouse_button_pressed(MouseButton::Left) || is_key_pressed(KeyCode::Space) {
+    pub fn update(
+        &mut self,
+        mouse_pos: Vec2,
+        player_pos: &Vec2,
+        map: &CellMap,
+        mut enemies: &mut Vec<Enemy>,
+    ) {
+        if is_mouse_button_down(MouseButton::Left) || is_key_pressed(KeyCode::Space) {
             let gun_position = Vec2::new(
                 settings::window::WIDTH as f32 / 2f32,
                 settings::window::HEIGHT as f32 / 2f32,
@@ -63,9 +70,11 @@ impl Gun {
             self.bullets.push(Bullet::new(*player_pos, rotation_vec));
         }
 
-        self.bullets.retain_mut( |bullet | !bullet.movement((map)));
+        self.bullets.retain_mut(|bullet| {
+            !bullet.movement(map, &mut enemies)
+        });
     }
-    
+
     pub fn draw(&self, mouse_pos: Vec2, player_pos: &Vec2) {
         let rotation_vec = mouse_pos - self.base.position;
         let rotation = rotation_vec.y.atan2(rotation_vec.x);

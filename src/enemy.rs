@@ -3,21 +3,30 @@ use crate::cell::Cell;
 use crate::cellMap::CellMap;
 use crate::directions::Directions;
 use crate::settings;
-use macroquad::color::RED;
+use crate::sprites::Sprites;
+use getset::{Getters, MutGetters};
+use macroquad::color::{RED, WHITE};
 use macroquad::math::Vec2;
-use macroquad::prelude::draw_circle;
+use macroquad::prelude::{
+    DrawTextureParams, draw_circle, draw_rectangle, draw_rectangle_lines, draw_texture_ex,
+};
 use rand::random;
 use std::arch::x86_64::_mm_or_epi32;
+use std::cmp::min;
 
 pub enum EnemyType {
     Ghost,
     Goblin,
 }
 
+#[derive(Getters, MutGetters)]
 pub struct Enemy {
+    #[getset(get = "pub", get_mut = "pub")]
     position: Vec2,
+    #[getset(get = "pub", get_mut = "pub")]
     hp: f32,
     dmg_cooldown: f32,
+    #[getset(get = "pub", get_mut = "pub")]
     enemy_type: EnemyType,
 }
 
@@ -38,6 +47,7 @@ impl Enemy {
     }
 
     pub fn update(&mut self, player_pos: &Vec2, ft: f32, map: &CellMap) -> bool {
+
         // returns true if collision occurred and false elsewhere
         match self.enemy_type {
             EnemyType::Ghost => {
@@ -101,29 +111,82 @@ impl Enemy {
 
         return false;
     }
-    pub fn draw(&self, player_pos: &Vec2) {
+    pub fn draw(&self, player_pos: &Vec2, sprite: &Sprites) {
         let window_w = settings::window::WIDTH as f32;
         let window_h = settings::window::HEIGHT as f32;
         let offset = 10f32;
 
+        let dest_size = match self.enemy_type {
+            EnemyType::Ghost => Vec2::new(
+                settings::enemy::ghost::SIZE * 2f32,
+                settings::enemy::ghost::SIZE * 2f32,
+            ),
+            EnemyType::Goblin => Vec2::new(
+                settings::enemy::goblin::SIZE * 2f32,
+                settings::enemy::goblin::SIZE * 2f32,
+            ),
+        };
+
         let bullet_camera_x = self.position.x - player_pos.x + window_w / 2f32;
         let bullet_camera_y = self.position.y - player_pos.y + window_h / 2f32;
+
+        //Self::draw_hp_bar(self, &bullet_camera_x, &bullet_camera_y);
+
+        let dest_sprite = match self.enemy_type {
+            EnemyType::Ghost => &sprite.enemies.ghost,
+            EnemyType::Goblin => &sprite.enemies.goblin,
+        };
 
         if -offset <= bullet_camera_x
             && bullet_camera_x - window_w <= offset
             && -offset <= bullet_camera_y
             && bullet_camera_y - window_h <= offset
         {
-            draw_circle(
-                bullet_camera_x,
-                bullet_camera_y,
-                settings::enemy::ghost::SIZE,
-                RED,
+            draw_texture_ex(
+                &dest_sprite,
+                bullet_camera_x - dest_size.x / 2f32,
+                bullet_camera_y - dest_size.y / 2f32,
+                WHITE,
+                DrawTextureParams {
+                    dest_size: Some(dest_size),
+                    source: None,
+                    rotation: 0f32,
+                    flip_x: false,
+                    flip_y: false,
+                    pivot: None,
+                },
             );
         }
     }
-}
+    fn draw_hp_bar(&self, pos_x: &f32, pos_y: &f32) {
+        let size = match self.enemy_type {
+            EnemyType::Ghost => settings::enemy::ghost::SIZE,
+            EnemyType::Goblin => settings::enemy::goblin::SIZE,
+        };
+        let thickness = size / 5f32;
+        let hp_max = match self.enemy_type {
+            EnemyType::Ghost => settings::enemy::ghost::HP,
+            EnemyType::Goblin => settings::enemy::goblin::HP,
+        };
 
+        draw_rectangle_lines(
+            pos_x - size,
+            pos_y + size * 2f32,
+            size * 2f32,
+            size / 2f32,
+            thickness,
+            settings::player::COLOR,
+        );
+        let curr_hp = if self.hp >= 0f32 { self.hp } else { 0f32 };
+        draw_rectangle(
+            pos_x - size + thickness / 2f32,
+            pos_y + size * 2f32 + thickness / 2f32,
+            (size * 2f32 - thickness) * (curr_hp / hp_max),
+            size / 2f32 - thickness,
+            settings::hp_bar::COLOR,
+        )
+    }
+}
 pub fn gen_new_enemies() -> Vec<Enemy> {
     let mut enemies: Vec<Enemy> = vec![];
 

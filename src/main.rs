@@ -13,6 +13,7 @@ mod collisions;
 mod CellStep;
 mod enemy;
 mod sprites;
+mod death;
 
 use crate::cellMap::CellMap;
 use game::*;
