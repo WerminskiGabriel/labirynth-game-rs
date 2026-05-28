@@ -1,5 +1,4 @@
 use macroquad::prelude::*;
-use crate::enemy::EnemyType;
 use crate::settings;
 use crate::sprites::Sprites;
 
@@ -11,7 +10,7 @@ pub struct Death {
 
 impl Death {
     pub fn update( &mut self, ft : f32) -> bool {
-        let max_animation_frame = settings::death::MAX_FRAMES;
+        let _max_animation_frame = settings::death::MAX_FRAMES;
         let frame_dur = settings::death::FRAME_DURATION;
 
         self.timer -= ft ;

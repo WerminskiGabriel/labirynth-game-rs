@@ -1,8 +1,6 @@
-use crate::cell::Cell;
 use crate::cellMap::CellMap;
 use crate::death::Death;
 use crate::enemy::{Enemy, gen_new_enemies};
-use crate::game::GameState::Completed;
 use crate::labyrinth::fill_path_to_finish;
 use crate::player::Player;
 use crate::sprites::Sprites;
@@ -48,7 +46,7 @@ impl Game {
 }
 
 impl Game {
-    pub fn update(&mut self, font: &Font, trigger: &mut f64) {
+    pub fn update(&mut self, font: &Font, _trigger: &mut f64) {
         match self.state {
             GameState::Playing => {
                 let mouse_pos = mouse_position();
@@ -95,7 +93,7 @@ impl Game {
                     enemy.draw(self.player.position(), &self.sprites);
                 }
 
-                for mut enemy in &mut self.enemies {
+                for enemy in &mut self.enemies {
                     if enemy.update(self.player.position(), ft, &self.map) {
                         *self.player.hp_mut() -= settings::enemy::ghost::DMG;
                     }

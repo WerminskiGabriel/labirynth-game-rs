@@ -1,15 +1,11 @@
 use crate::CellStep::CellStep;
-use crate::cell::Cell;
 use crate::cellMap::CellMap;
 use crate::collisions::walls_collision;
 use crate::directions::Directions;
 use crate::settings;
 use crate::sprites::Sprites;
 use getset::{Getters, MutGetters};
-use macroquad::input::KeyCode::S;
-use macroquad::miniquad::start;
 use macroquad::prelude::*;
-use std::iter::Map;
 
 #[derive(Getters, MutGetters, Clone, Debug)]
 pub struct Player {
@@ -45,10 +41,10 @@ impl Player {
             speed = speed_slow;
         }
 
-        let cell_size = settings::cell::playing::SIZE;
-        let wall_size = settings::cell::playing::THICKNESS;
-        let window_width = settings::window::WIDTH as f32;
-        let window_height = settings::window::HEIGHT as f32;
+        let _cell_size = settings::cell::playing::SIZE;
+        let _wall_size = settings::cell::playing::THICKNESS;
+        let _window_width = settings::window::WIDTH as f32;
+        let _window_height = settings::window::HEIGHT as f32;
         let player_radius = settings::player::SIZE / 2f32;
 
         let mut tmp_x: f32 = self.position.x;

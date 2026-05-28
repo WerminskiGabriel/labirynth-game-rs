@@ -1,11 +1,9 @@
 use crate::CellStep::CellStep;
-use crate::cellMap::CellMap;
 use crate::directions::Directions;
 use crate::settings;
 use crate::sprites::Sprites;
 use getset::{Getters, MutGetters};
 use macroquad::prelude::*;
-use std::any::Any;
 
 #[derive(Getters, MutGetters, Clone, Debug)]
 pub struct Cell {
@@ -87,7 +85,7 @@ impl Cell {
 
 impl Cell {
     pub fn update(&mut self) {}
-    pub fn draw_sprite(&self, sprites: &Sprites, x_pos: &f32, y_pos: &f32, tile_size: &f32) {
+    pub fn draw_sprite(&self, sprites: &Sprites, x_pos: &f32, y_pos: &f32, _tile_size: &f32) {
         let dest_size = Some(Vec2::new(
             settings::cell::playing::SIZE,
             settings::cell::playing::SIZE,
@@ -261,8 +259,8 @@ impl Cell {
         &self,
         x_pos: &f32,
         y_pos: &f32,
-        tile_size: &f32,
-        wall_size: &f32,
+        _tile_size: &f32,
+        _wall_size: &f32,
         sprites: &Sprites,
     ) {
 

@@ -45,7 +45,7 @@ impl Enemy {
         match self.enemy_type {
             EnemyType::Ghost => {
                 self.dmg_cooldown -= ft;
-                let movement_vec = (*player_pos - self.position);
+                let movement_vec = *player_pos - self.position ;
 
                 if movement_vec.length_squared()
                     <= (settings::enemy::ghost::SIZE * settings::enemy::ghost::SIZE)
@@ -60,7 +60,7 @@ impl Enemy {
                 self.dmg_cooldown -= ft;
 
                 let move_speed = settings::enemy::goblin::SPEED;
-                let cell_size = settings::cell::playing::SIZE;
+                let _cell_size = settings::cell::playing::SIZE;
 
                 let enemy_idx = (self.position / settings::cell::playing::SIZE).floor();
                 let player_idx = (*player_pos / settings::cell::playing::SIZE).floor();
@@ -80,15 +80,15 @@ impl Enemy {
                     CellStep::Finish => *player_pos,
                     CellStep::Unvisited => *player_pos,
                     _ => {
-                        ((enemy_idx + movement_idx) * settings::cell::playing::SIZE
+                        (enemy_idx + movement_idx) * settings::cell::playing::SIZE
                             + Vec2::new(
                                 settings::cell::playing::SIZE / 2f32,
                                 settings::cell::playing::SIZE / 2f32,
-                            ))
+                            ) 
                     }
                 };
 
-                let movement_vec = (dest_cell_center_pos - self.position);
+                let movement_vec = dest_cell_center_pos - self.position ;
 
                 if movement_vec.length_squared()
                     <= (settings::enemy::goblin::SIZE * settings::enemy::goblin::SIZE)

@@ -1,5 +1,4 @@
 use crate::cell::Cell;
-use crate::directions::Directions;
 use crate::labyrinth::*;
 use crate::player::Player;
 use crate::settings;

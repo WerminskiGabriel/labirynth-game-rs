@@ -1,14 +1,11 @@
 use crate::Bullet::Bullet;
-use crate::cell::Cell;
 use crate::cellMap::CellMap;
 use crate::enemy::Enemy;
 use crate::settings;
 use macroquad::color::Color;
-use macroquad::input::{MouseButton, is_key_pressed, is_mouse_button_pressed, is_mouse_button_down};
+use macroquad::input::{MouseButton, is_key_pressed, is_mouse_button_down};
 use macroquad::math::Vec2;
-use macroquad::prelude::{DrawRectangleParams, KeyCode, draw_rectangle_ex};
-use macroquad::ui::widgets::Button;
-use std::hash::Hasher;
+use macroquad::prelude::KeyCode;
 use crate::sprites::Sprites;
 
 enum Weapon {
@@ -78,7 +75,7 @@ impl Gun {
 
     pub fn draw(&self, mouse_pos: Vec2, player_pos: &Vec2, sprites : &Sprites) {
         let rotation_vec = mouse_pos - self.base.position;
-        let rotation = rotation_vec.y.atan2(rotation_vec.x);
+        let _rotation = rotation_vec.y.atan2(rotation_vec.x);
 
         let bullets = &self.bullets;
         for bullet in bullets {

@@ -104,9 +104,9 @@ pub mod cell {
     use super::*;
     pub mod playing {
         use super::*;
-        use super::*;
-        use crate::settings::COLOR_E;
-        use macroquad::color::Color;
+        
+        
+        
         pub const SIZE: f32 = 320f32;
         pub const THICKNESS: f32 = 30f32;
         pub const DMG: f32 = 2f32;
@@ -146,7 +146,7 @@ pub mod menu {
         use super::*;
         use crate::settings;
         pub const COLOR: Color = COLOR_D;
-        pub const THICKNESS: f32 = (SIZE * 0.6);
+        pub const THICKNESS: f32 = SIZE * 0.6 ;
         pub const SIZE: f32 = map::WIDTH / settings::menu::map::ROWS as f32;
     }
 

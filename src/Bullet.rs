@@ -3,10 +3,9 @@ use crate::collisions::walls_collision;
 use crate::directions::Directions;
 use crate::enemy::{Enemy, EnemyType};
 use crate::settings;
-use crate::sprites::{Enemies, Sprites};
+use crate::sprites::Sprites;
 use macroquad::math::Vec2;
-use macroquad::prelude::{draw_circle, draw_texture_ex, DrawTextureParams};
-use std::any::Any;
+use macroquad::prelude::{draw_texture_ex, DrawTextureParams};
 use macroquad::color::WHITE;
 
 pub struct Bullet {
@@ -36,13 +35,13 @@ impl Bullet {
         let step_movement_vec = movement_vec / steps;
         let mut is_collision: bool = false;
 
-        for idx in 0..steps as usize {
+        for _idx in 0..steps as usize {
             let tmp_pos = self.position + step_movement_vec;
 
             {
                 // walls collisions
                 let mut tmp_x = tmp_pos.x;
-                let direction_x = if (tmp_x < window_w / 2f32) {
+                let direction_x = if tmp_x < window_w / 2f32  {
                     Directions::West
                 } else {
                     Directions::East
@@ -59,7 +58,7 @@ impl Bullet {
                 }
 
                 let mut tmp_y = tmp_pos.y;
-                let direction_y = if (tmp_y < window_h / 2f32) {
+                let direction_y = if tmp_y < window_h / 2f32  {
                     Directions::North
                 } else {
                     Directions::South
@@ -79,7 +78,7 @@ impl Bullet {
             }
             {
                 //enemies collisions
-                for mut enemy in &mut *enemies {
+                for enemy in &mut *enemies {
                     let enemy_radius = match enemy.enemy_type() {
                         EnemyType::Ghost => settings::enemy::ghost::SIZE,
                         EnemyType::Goblin => settings::enemy::goblin::SIZE,
@@ -87,7 +86,7 @@ impl Bullet {
                     let bullet_radius = bullet_radius;
                     let enemy_pos = *enemy.position();
                     let bullet_pos = self.position;
-                    let tmp_bullet_pos = tmp_pos;
+                    let _tmp_bullet_pos = tmp_pos;
 
                     let distance = bullet_pos.distance(enemy_pos);
 

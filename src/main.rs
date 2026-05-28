@@ -15,12 +15,10 @@ mod enemy;
 mod sprites;
 mod death;
 
-use crate::cellMap::CellMap;
 use game::*;
 use macroquad::prelude::*;
 use std::time::Duration;
-use std::{thread, vec};
-use crate::labyrinth::fill_path_to_finish;
+use std::thread;
 use crate::sprites::Sprites;
 
 fn window_config() -> Conf {
