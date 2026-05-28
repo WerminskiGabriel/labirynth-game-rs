@@ -1,18 +1,11 @@
+use ::rand::random_range;
 use crate::CellStep::CellStep;
-use crate::cell::Cell;
 use crate::cellMap::CellMap;
 use crate::directions::Directions;
 use crate::settings;
 use crate::sprites::Sprites;
 use getset::{Getters, MutGetters};
-use macroquad::color::{RED, WHITE};
-use macroquad::math::Vec2;
-use macroquad::prelude::{
-    DrawTextureParams, draw_circle, draw_rectangle, draw_rectangle_lines, draw_texture_ex,
-};
-use rand::random;
-use std::arch::x86_64::_mm_or_epi32;
-use std::cmp::min;
+use macroquad::prelude::*;
 
 pub enum EnemyType {
     Ghost,
@@ -105,7 +98,7 @@ impl Enemy {
                     return true;
                 }
 
-                self.position += movement_vec.normalize_or_zero() * move_speed;
+                self.position += movement_vec.normalize_or_zero() * move_speed * ft;
             }
         };
 
@@ -193,11 +186,17 @@ pub fn gen_new_enemies() -> Vec<Enemy> {
     let tile_size = settings::cell::playing::SIZE;
 
     for _ in 0..settings::enemy::MAX_COUNT {
-        let x = rand::random_range(0..settings::map::playing::COLS) as f32 * tile_size
+        let x = random_range(1..settings::map::playing::COLS-1) as f32 * tile_size
             - tile_size / 2f32;
-        let y = rand::random_range(0..settings::map::playing::ROWS) as f32 * tile_size
+        let y = random_range(1..settings::map::playing::ROWS-1) as f32 * tile_size
             - tile_size / 2f32;
-        enemies.push(Enemy::new(Vec2::new(x, y), EnemyType::Goblin));
+
+        if  random_range(0..=100) < (settings::enemy::GOBLIN_GHOST_RATIO * 100f32 ) as i32{
+            enemies.push(Enemy::new(Vec2::new(x, y), EnemyType::Goblin));
+        }else {
+            enemies.push(Enemy::new(Vec2::new(x, y), EnemyType::Ghost));
+        }
+
     }
 
     return enemies;

@@ -135,20 +135,20 @@ pub fn fill_path_to_finish(map: &mut CellMap, start_pos: Vec2) -> Vec2 {
     }
     return finish_pos;
 }
-pub fn fill_enemy_grid(worldMap: &mut CellMap) -> Vec<Vec<CellStep>> {
-    let map_size = (worldMap.width() * worldMap.height()) as usize;
+pub fn fill_enemy_grid(world_map: &mut CellMap) -> Vec<Vec<CellStep>> {
+    let map_size = (world_map.width() * world_map.height()) as usize;
     let mut enemy_grid = vec![vec![CellStep::Unvisited; map_size]; map_size];
 
-    for x_player in 0..*worldMap.width() {
-        for y_player in 0..*worldMap.height() {
+    for x_player in 0..*world_map.width() {
+        for y_player in 0..*world_map.height() {
             let player_pos = Vec2::new(x_player as f32, y_player as f32);
             let enemy_grid_player =
-                &mut enemy_grid[player_pos.y as usize * worldMap.width() + player_pos.x as usize];
+                &mut enemy_grid[player_pos.y as usize * world_map.width() + player_pos.x as usize];
 
             let mut curr_cell_in_player_map =
-                grid_obj(&player_pos, &enemy_grid_player, worldMap.width());
+                grid_obj(&player_pos, &enemy_grid_player, world_map.width());
             
-            let player_idx = grid_idx(&player_pos, worldMap.width());
+            let player_idx = grid_idx(&player_pos, world_map.width());
             enemy_grid_player[player_idx]= CellStep::Finish;
 
             let mut que = VecDeque::new();
@@ -156,8 +156,8 @@ pub fn fill_enemy_grid(worldMap: &mut CellMap) -> Vec<Vec<CellStep>> {
 
             while !que.is_empty() {
                 let curr_world_pos = que.pop_front().unwrap();
-                let curr_cell = grid_obj(&curr_world_pos, &enemy_grid_player, worldMap.width());
-                let curr_world_cell = worldMap.grid(curr_world_pos);
+                let curr_cell = grid_obj(&curr_world_pos, &enemy_grid_player, world_map.width());
+                let curr_world_cell = world_map.grid(curr_world_pos);
 
                 let directions = [
                     (Directions::North, curr_world_cell.is_north_wall()),
@@ -169,10 +169,10 @@ pub fn fill_enemy_grid(worldMap: &mut CellMap) -> Vec<Vec<CellStep>> {
                 for (dir, is_wall) in directions {
                     if !is_wall {
                         let new_world_pos = curr_world_pos + dir.vector();
-                        let world_idx = grid_idx(&new_world_pos, worldMap.width());
+                        let world_idx = grid_idx(&new_world_pos, world_map.width());
 
                         let mut new_cell =
-                            grid_obj(&new_world_pos, &enemy_grid_player, worldMap.width());
+                            grid_obj(&new_world_pos, &enemy_grid_player, world_map.width());
 
                         if new_cell == CellStep::Unvisited {
                             enemy_grid_player[world_idx] = CellStep::Direction(dir.opposite());

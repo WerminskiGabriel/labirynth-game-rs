@@ -3,10 +3,11 @@ use crate::collisions::walls_collision;
 use crate::directions::Directions;
 use crate::enemy::{Enemy, EnemyType};
 use crate::settings;
-use crate::sprites::Enemies;
+use crate::sprites::{Enemies, Sprites};
 use macroquad::math::Vec2;
-use macroquad::prelude::draw_circle;
+use macroquad::prelude::{draw_circle, draw_texture_ex, DrawTextureParams};
 use std::any::Any;
+use macroquad::color::WHITE;
 
 pub struct Bullet {
     position: Vec2,
@@ -99,7 +100,7 @@ impl Bullet {
         }
         is_collision
     }
-    pub fn draw(&self, player_pos: &Vec2) {
+    pub fn draw(&self, player_pos: &Vec2, sprites: &Sprites) {
         let window_w = settings::window::WIDTH as f32;
         let window_h = settings::window::HEIGHT as f32;
         let offset = 10f32;
@@ -107,16 +108,28 @@ impl Bullet {
         let bullet_camera_x = self.position.x - player_pos.x + window_w / 2f32;
         let bullet_camera_y = self.position.y - player_pos.y + window_h / 2f32;
 
+        let dest_size = Vec2::new( settings::bullet::SIZE*2f32, settings::bullet::SIZE*2f32);
+
         if -offset <= bullet_camera_x
             && bullet_camera_x - window_w <= offset
             && -offset <= bullet_camera_y
             && bullet_camera_y - window_h <= offset
         {
-            draw_circle(
-                bullet_camera_x,
-                bullet_camera_y,
-                settings::bullet::SIZE,
-                settings::bullet::COLOR,
+           
+
+            draw_texture_ex(
+                &sprites.bullet,
+                bullet_camera_x - dest_size.x / 2f32,
+                bullet_camera_y - dest_size.y / 2f32,
+                WHITE,
+                DrawTextureParams {
+                    dest_size: Some(dest_size),
+                    source: None,
+                    rotation: 0f32,
+                    flip_x: false,
+                    flip_y: false,
+                    pivot: None,
+                },
             );
         }
     }

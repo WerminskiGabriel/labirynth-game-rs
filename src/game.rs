@@ -83,7 +83,7 @@ impl Game {
                     death.draw(self.player.position(), &self.sprites);
                 }
 
-                self.gun.draw(mouse_pos, self.player.position());
+                self.gun.draw(mouse_pos, self.player.position(), &self.sprites);
 
                 self.player.draw(&self.sprites, mouse_pos);
                 self.player.update(&self.map);

@@ -30,6 +30,14 @@ const COLOR_E: Color = Color {
     b: 46f32 / 255.0,
     a: 1f32,
 };
+
+const COLOR_GREEN_LIGHT: Color = Color {
+    r: 82f32 / 255.0,
+    g: 93f32 / 255.0,
+    b: 69f32 / 255.0,
+    a: 1f32,
+};
+
 pub mod player {
     use super::*;
 
@@ -48,10 +56,11 @@ pub mod enemy {
     use super::*;
 
     pub const MAX_COUNT: usize = 20000usize;
+    pub const GOBLIN_GHOST_RATIO : f32 = 0.95f32;
     pub mod ghost {
         use super::*;
 
-        pub const SPEED: f32 = 2f32;
+        pub const SPEED: f32 = 130f32;
         pub const HP: f32 = 200f32;
         pub const DMG_RADIUS: f32 = 100f32;
         pub const DMG: f32 = 10f32;
@@ -61,7 +70,7 @@ pub mod enemy {
     pub mod goblin {
         use super::*;
 
-        pub const SPEED: f32 = 5f32;
+        pub const SPEED: f32 = 170f32;
         pub const HP: f32 = 200f32;
         pub const DMG_RADIUS: f32 = 100f32;
         pub const DMG: f32 = 10f32;
@@ -105,7 +114,7 @@ pub mod cell {
 }
 pub mod hp_bar {
     use super::*;
-    pub const COLOR: Color = COLOR_A;
+    pub const COLOR: Color = COLOR_GREEN_LIGHT;
 }
 
 pub mod map {
@@ -136,7 +145,7 @@ pub mod menu {
     pub mod cell {
         use super::*;
         use crate::settings;
-        pub const COLOR: Color = COLOR_B;
+        pub const COLOR: Color = COLOR_D;
         pub const THICKNESS: f32 = (SIZE * 0.6);
         pub const SIZE: f32 = map::WIDTH / settings::menu::map::ROWS as f32;
     }

@@ -9,6 +9,7 @@ use macroquad::math::Vec2;
 use macroquad::prelude::{DrawRectangleParams, KeyCode, draw_rectangle_ex};
 use macroquad::ui::widgets::Button;
 use std::hash::Hasher;
+use crate::sprites::Sprites;
 
 enum Weapon {
     Gun,
@@ -75,13 +76,13 @@ impl Gun {
         });
     }
 
-    pub fn draw(&self, mouse_pos: Vec2, player_pos: &Vec2) {
+    pub fn draw(&self, mouse_pos: Vec2, player_pos: &Vec2, sprites : &Sprites) {
         let rotation_vec = mouse_pos - self.base.position;
         let rotation = rotation_vec.y.atan2(rotation_vec.x);
 
         let bullets = &self.bullets;
         for bullet in bullets {
-            bullet.draw(player_pos);
+            bullet.draw(player_pos, sprites);
         }
 
         /*

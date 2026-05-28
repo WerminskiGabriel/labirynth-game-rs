@@ -7,6 +7,7 @@ pub struct Sprites {
     pub player: Texture2D,
     pub enemies: Enemies,
     pub blood_frames: Vec<Texture2D>,
+    pub bullet : Texture2D
 }
 pub struct Walls {
     pub wall_tl: Texture2D,
@@ -47,7 +48,7 @@ impl Sprites {
                     .await
                     .unwrap(),
             },
-            arrow: load_texture("media/sprites/other/arrow.png").await.unwrap(),
+            arrow: load_texture("media/sprites/other/arrow3.png").await.unwrap(),
             player: load_texture("media/sprites/player/1.png").await.unwrap(),
             enemies: Enemies {
                 ghost: load_texture("media/sprites/enemy/ghost-cutie-3.png")
@@ -58,6 +59,8 @@ impl Sprites {
                     .unwrap(),
             },
             blood_frames,
+            bullet: load_texture("media/sprites/bullet/bullet-green5.png").await.unwrap(),
+
         }
     }
 }
