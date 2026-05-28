@@ -127,7 +127,7 @@ pub mod map {
     }
     pub mod menu {
         use super::*;
-        pub const COLS: usize = 60usize;
+        pub const COLS: usize = 100usize;
         pub const ROWS: usize = 100usize;
         pub const START_POS: Vec2 = Vec2::new(50f32, 50f32);
     }
