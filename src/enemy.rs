@@ -186,9 +186,9 @@ pub fn gen_new_enemies() -> Vec<Enemy> {
     let tile_size = settings::cell::playing::SIZE;
 
     for _ in 0..settings::enemy::MAX_COUNT {
-        let x = random_range(1..settings::map::playing::COLS-1) as f32 * tile_size
+        let x = random_range(2..settings::map::playing::COLS-2) as f32 * tile_size
             - tile_size / 2f32;
-        let y = random_range(1..settings::map::playing::ROWS-1) as f32 * tile_size
+        let y = random_range(2..settings::map::playing::ROWS-2) as f32 * tile_size
             - tile_size / 2f32;
 
         if  random_range(0..=100) < (settings::enemy::GOBLIN_GHOST_RATIO * 100f32 ) as i32{
